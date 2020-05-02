@@ -1,10 +1,10 @@
-package cn.hbkcn.translate
+package cn.hbkcn.translate.basic
 
 import okhttp3.FormBody
 import java.security.MessageDigest
 
-class TranslateBody constructor(query: String, from: Translate.Language, to: Translate.Language) {
-    val body: HashMap<String, String> = HashMap()
+class TranslateBody constructor(query: String, from: Language, to: Language) {
+    private val body: HashMap<String, String> = HashMap()
     private val appId: String = "3cd47726b488d5ad"
     private val appKey: String = "WiAQEJoYTzUcF9We6HnwkFAy7NByYfMt"
 

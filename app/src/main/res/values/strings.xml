@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Translate</string>
+    <string name="input">输入单词或句子</string>
 </resources>
