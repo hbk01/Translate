@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Translate</string>
-    <string name="input">输入单词或句子</string>
+    <string name="input">Enter a word or sentence</string>
+    <string name="default_tip">That\'s the problem with life, right?\\nEither you know what you want, and you don\'t get what you want.\\nor get what you want and then you don\'t know what you want</string>
 </resources>

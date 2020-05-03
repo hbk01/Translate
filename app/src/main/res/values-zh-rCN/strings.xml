@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">翻译</string>
+    <string name="input">输入单词或句子</string>
+    <string name="default_tip">人生就是这样，对吧？\\n你要么很清楚自己想要什么，却总是得不到。\\n要么你得到了，却突然不知道自己想要什么了。</string>
+</resources>
