@@ -2,5 +2,7 @@
 <resources>
     <string name="app_name">翻译</string>
     <string name="input">输入单词或句子</string>
-    <string name="default_tip">人生就是这样，对吧？\\n你要么很清楚自己想要什么，却总是得不到。\\n要么你得到了，却突然不知道自己想要什么了。</string>
+    <string name="default_tip">今天，也是充满希望的一天！</string>
+    <string name="uk_phonetic">英式音标：%1$s</string>
+    <string name="us_phonetic">美式音标：%1$s</string>
 </resources>

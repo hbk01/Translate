@@ -11,13 +11,11 @@
         android:layout_weight="0.95">
 
         <LinearLayout
-            android:id="@+id/main_content"
+            android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:orientation="horizontal">
-
-        </LinearLayout>
+            android:orientation="vertical" />
 
     </ScrollView>
 
@@ -35,7 +33,7 @@
             tools:ignore="NestedWeights">
 
             <EditText
-                android:id="@+id/main_editText"
+                android:id="@+id/editText"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="0.99"
@@ -44,7 +42,7 @@
                 android:inputType="text" />
 
             <Button
-                android:id="@+id/main_translateBtn"
+                android:id="@+id/translateBtn"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_weight="0.01"
@@ -59,20 +57,20 @@
             android:orientation="horizontal">
 
             <Spinner
-                android:id="@+id/language_from"
+                android:id="@+id/from"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:background="@null" />
 
             <Button
-                android:id="@+id/language_swap"
+                android:id="@+id/swap"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:background="@drawable/ic_chevron_right_black_24dp" />
 
             <Spinner
-                android:id="@+id/language_to"
+                android:id="@+id/to"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"

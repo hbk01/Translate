@@ -99,9 +99,9 @@ class Response(json: String) {
     fun getUSPhonetic(): String {
         if (jsonObject.has("basic")) {
             val basic = jsonObject.getJSONObject("basic")
-            return basic.optString("us-phonetic", "-")
+            return basic.optString("us-phonetic", "")
         }
-        return "-"
+        return ""
     }
 
     /**
@@ -123,9 +123,9 @@ class Response(json: String) {
     fun getUKPhonetic(): String {
         if (jsonObject.has("basic")) {
             val basic = jsonObject.getJSONObject("basic")
-            return basic.optString("uk-phonetic", "-")
+            return basic.optString("uk-phonetic", "")
         }
-        return "-"
+        return ""
     }
 
     /**

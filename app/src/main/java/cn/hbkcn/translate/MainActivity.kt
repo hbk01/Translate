@@ -1,28 +1,32 @@
 package cn.hbkcn.translate
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import cn.hbkcn.translate.basic.Language
 import cn.hbkcn.translate.basic.Translate
+import cn.hbkcn.translate.view.GenerateCard
 
 class MainActivity : AppCompatActivity() {
-    /**
-     * 选择语言
-     */
     private lateinit var from: Spinner
     private lateinit var to: Spinner
     private lateinit var swap: Button
+    private lateinit var editText: EditText
+    private lateinit var translateBtn: Button
+    private lateinit var content: LinearLayout
+
+    /**
+     * 选择语言
+     */
     private var swapArrow: Boolean = false
     private var fromLanguage: Language = Language.AUTO
     private var toLanguage: Language = Language.AUTO
 
     /**
-     * 输入及翻译
+     * 翻译
      */
-    private lateinit var editText: EditText
-    private lateinit var trans: Button
     private var translate: Translate = Translate()
 
     /**
@@ -30,27 +34,23 @@ class MainActivity : AppCompatActivity() {
      */
     private var lastInput: String = ""
 
-    /**
-     * 结果显示
-     */
-    private lateinit var content: LinearLayout
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initial()
     }
 
+    @SuppressLint("InflateParams")
     private fun initial() {
         /**
          * 初始化控件
          */
-        from = findViewById(R.id.language_from)
-        to = findViewById(R.id.language_to)
-        swap = findViewById(R.id.language_swap)
-        editText = findViewById(R.id.main_editText)
-        trans = findViewById(R.id.main_translateBtn)
-        content = findViewById(R.id.main_content)
+        from = findViewById(R.id.from)
+        to = findViewById(R.id.to)
+        swap = findViewById(R.id.swap)
+        editText = findViewById(R.id.editText)
+        translateBtn = findViewById(R.id.translateBtn)
+        content = findViewById(R.id.content)
 
         /**
          * 初始化适配器
@@ -73,9 +73,12 @@ class MainActivity : AppCompatActivity() {
         to.adapter = adapter
 
         val cardView = layoutInflater.inflate(R.layout.card_title, null)
-        val title: TextView = cardView.findViewById(R.id.card_title)
-        title.text = getString(R.string.default_tip)
+        val cardTitle: TextView = cardView.findViewById(R.id.cardTitle)
+        cardTitle.append(getString(R.string.default_tip))
+        val divider: View = cardView.findViewById(R.id.divider)
+        divider.visibility = View.GONE
         content.addView(cardView)
+
 
         /**
          * 初始化监听器
@@ -131,31 +134,13 @@ class MainActivity : AppCompatActivity() {
             toLanguage = temp
         }
 
-        trans.setOnClickListener {
+        translateBtn.setOnClickListener {
             val input = editText.text.toString()
             if (input != lastInput) {
                 lastInput = input
                 translate.translate(input, fromLanguage, toLanguage) {
                     runOnUiThread {
-                        content.removeAllViews()
-                        val child = layoutInflater.inflate(R.layout.card_title, null)
-                        if (it.getErrorCode() == "0") {
-                            TODO("建个类来弄这些，不然要累死")
-                            val title: TextView = child.findViewById(R.id.card_title)
-                            val contentLayout: LinearLayout = child.findViewById(R.id.card_content)
-                            val contentText = TextView(this)
-                            it.getExplains().forEach {
-                                contentText.append(it)
-                                contentText.append(System.lineSeparator())
-                            }
-                            title.text = "基本释义"
-                            contentLayout.addView(contentText)
-                            content.addView(child)
-                        } else {
-                            val title: TextView = child.findViewById(R.id.card_title)
-                            title.text = "Error: " + it.getErrorCode()
-                            content.addView(child)
-                        }
+                        GenerateCard(this, layoutInflater, it).run(content)
                     }
                 }
             }
