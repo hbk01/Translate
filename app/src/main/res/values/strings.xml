@@ -4,4 +4,12 @@
     <string name="uk_phonetic">UK Phonetic: %1$s</string>
     <string name="us_phonetic">US Phonetic: %1$s</string>
     <string name="default_tip">Today is also a day full of hope!</string>
+    <string name="lan_auto">Auto</string>
+    <string name="lan_zh">Chinese</string>
+    <string name="lan_en">English</string>
+    <string name="lan_ja">Japanese</string>
+    <string name="lan_ko">Korean</string>
+    <string name="lan_fr">French</string>
+    <string name="lan_ru">Russian</string>
+    <string name="lan_de">German</string>
 </resources>

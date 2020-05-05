@@ -57,14 +57,14 @@ class MainActivity : AppCompatActivity() {
          */
         val lanMap: LinkedHashMap<String, String> = LinkedHashMap()
         with(lanMap) {
-            put("自动识别", "auto")
-            put("中文", "zh-CHS")
-            put("英文", "en")
-            put("日文", "ja")
-            put("韩文", "ko")
-            put("法文", "fr")
-            put("俄文", "ru")
-            put("德文", "de")
+            put(getString(R.string.lan_auto), "auto")
+            put(getString(R.string.lan_zh), "zh-CHS")
+            put(getString(R.string.lan_en), "en")
+            put(getString(R.string.lan_ja), "ja")
+            put(getString(R.string.lan_ko), "ko")
+            put(getString(R.string.lan_fr), "fr")
+            put(getString(R.string.lan_ru), "ru")
+            put(getString(R.string.lan_de), "de")
         }
 
         val data = lanMap.keys.toList()
