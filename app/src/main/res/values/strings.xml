@@ -12,4 +12,7 @@
     <string name="lan_fr">French</string>
     <string name="lan_ru">Russian</string>
     <string name="lan_de">German</string>
+    <string name="card_title_error">Error</string>
+    <string name="card_title_explains">Explains</string>
+    <string name="card_title_phonetic">Phonetic</string>
 </resources>

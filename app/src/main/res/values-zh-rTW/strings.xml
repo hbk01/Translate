@@ -13,4 +13,7 @@
     <string name="lan_fr">法語</string>
     <string name="lan_ru">俄語</string>
     <string name="lan_de">德語</string>
+    <string name="card_title_error">錯誤</string>
+    <string name="card_title_explains">基本釋義</string>
+    <string name="card_title_phonetic">音標</string>
 </resources>

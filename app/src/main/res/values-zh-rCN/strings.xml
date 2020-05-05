@@ -13,4 +13,7 @@
     <string name="lan_en">英语</string>
     <string name="lan_zh">中文</string>
     <string name="lan_auto">自动</string>
+    <string name="card_title_explains">基本释义</string>
+    <string name="card_title_phonetic">音标</string>
+    <string name="card_title_error">错误</string>
 </resources>

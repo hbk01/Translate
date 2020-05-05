@@ -2,9 +2,11 @@ package cn.hbkcn.translate.view
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.media.MediaPlayer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import cn.hbkcn.translate.R
@@ -28,16 +30,18 @@ class GenerateCard constructor(
         cardList.clear()
         if (response.getErrorCode() == "0") {
             if (response.getExplains().isNotEmpty()) {
-                genCard("基本释义", response.getExplains())
+                genCard(getString(R.string.card_title_explains), response.getExplains())
             }
             if (response.getUSPhonetic().isNotEmpty()) {
-                // todo：可以在这里播放发音
                 val con = LinearLayout(context)
                 con.orientation = LinearLayout.VERTICAL
+                con.layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+                )
+
                 val us = TextView(context)
                 us.text = String.format(
-                    context.getString(R.string.us_phonetic),
-                    response.getUSPhonetic()
+                    context.getString(R.string.us_phonetic), response.getUSPhonetic()
                 )
                 con.addView(us)
                 if (response.getUKPhonetic().isNotEmpty()) {
@@ -48,10 +52,30 @@ class GenerateCard constructor(
                     )
                     con.addView(uk)
                 }
-                genCard("音标", con)
+                if (response.getToSpeakUrl().isNotEmpty()) {
+                    con.setOnClickListener {
+                        // todo 似乎不能直接播放，那就先下載在播放吧。。
+                        Log.e("MediaPlayer", "Start")
+                        val player = MediaPlayer()
+                        Log.i("MediaPlayer", response.getToSpeakUrl())
+                        player.setDataSource(response.getToSpeakUrl())
+                        player.prepareAsync()
+                        player.setOnPreparedListener {
+                            it.start()
+                        }
+                        player.setOnCompletionListener {
+                            it?.release()
+                        }
+                        player.setOnErrorListener { mp, what, extra ->
+                            Log.e("MediaPlayer", "OnError: " + what + ", " + extra)
+                            false
+                        }
+                    }
+                }
+                genCard(getString(R.string.card_title_phonetic), con)
             }
         } else {
-            genCard("Error", response.getErrorCode())
+            genCard(getString(R.string.card_title_error), response.getErrorCode())
         }
 
         // 把 list 里的卡片添加进容器
@@ -109,4 +133,6 @@ class GenerateCard constructor(
         contentLayout.addView(contentView)
         cardList.add(card)
     }
+
+    private fun getString(resId: Int): String = context.getString(resId)
 }
