@@ -16,4 +16,5 @@
     <string name="card_title_explains">基本释义</string>
     <string name="card_title_phonetic">音标</string>
     <string name="card_title_error">错误</string>
+    <string name="card_title_webdict">网络释义</string>
 </resources>

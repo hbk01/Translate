@@ -15,4 +15,5 @@
     <string name="card_title_error">Error</string>
     <string name="card_title_explains">Explains</string>
     <string name="card_title_phonetic">Phonetic</string>
+    <string name="card_title_webdict">Webdict</string>
 </resources>

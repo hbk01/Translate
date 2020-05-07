@@ -32,6 +32,7 @@ class GenerateCard constructor(
             if (response.getExplains().isNotEmpty()) {
                 genCard(getString(R.string.card_title_explains), response.getExplains())
             }
+
             if (response.getUSPhonetic().isNotEmpty()) {
                 val con = LinearLayout(context)
                 con.orientation = LinearLayout.VERTICAL
@@ -39,40 +40,39 @@ class GenerateCard constructor(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
                 )
 
-                val us = TextView(context)
-                us.text = String.format(
-                    context.getString(R.string.us_phonetic), response.getUSPhonetic()
-                )
-                con.addView(us)
-                if (response.getUKPhonetic().isNotEmpty()) {
-                    val uk = TextView(context)
-                    uk.text = String.format(
-                        context.getString(R.string.uk_phonetic),
-                        response.getUKPhonetic()
-                    )
-                    con.addView(uk)
-                }
-                if (response.getToSpeakUrl().isNotEmpty()) {
-                    con.setOnClickListener {
-                        // todo 似乎不能直接播放，那就先下載在播放吧。。
-                        Log.e("MediaPlayer", "Start")
+                val usTextView = TextView(context)
+                val ukTextView = TextView(context)
+
+                usTextView.text =
+                    String.format(getString(R.string.us_phonetic), response.getUSPhonetic())
+                ukTextView.text =
+                    String.format(getString(R.string.uk_phonetic), response.getUKPhonetic())
+
+                con.addView(usTextView)
+                con.addView(ukTextView)
+
+                val cardOnClick: View.OnClickListener = View.OnClickListener {
+                    if (response.getFromSpeakUrl().isNotEmpty()) {
                         val player = MediaPlayer()
-                        Log.i("MediaPlayer", response.getToSpeakUrl())
-                        player.setDataSource(response.getToSpeakUrl())
-                        player.prepareAsync()
-                        player.setOnPreparedListener {
-                            it.start()
-                        }
-                        player.setOnCompletionListener {
-                            it?.release()
-                        }
+                        player.setDataSource(response.getFromSpeakUrl())
+                        player.prepare()
+
+                        player.setOnPreparedListener { it.start() }
+                        player.setOnCompletionListener { it.release() }
+
                         player.setOnErrorListener { mp, what, extra ->
-                            Log.e("MediaPlayer", "OnError: " + what + ", " + extra)
-                            false
+                            Log.e("MediaPlayer", "Error: $what/$extra")
+                            true
                         }
                     }
                 }
-                genCard(getString(R.string.card_title_phonetic), con)
+
+                genCard(getString(R.string.card_title_phonetic), con, cardOnClick)
+            }
+
+            if (response.getWebDict().isNotEmpty()) {
+                Log.e("WebDict", response.getWebDict().toString())
+                genCard(getString(R.string.card_title_webdict), response.getWebDict())
             }
         } else {
             genCard(getString(R.string.card_title_error), response.getErrorCode())
@@ -90,7 +90,11 @@ class GenerateCard constructor(
      * @param content 卡片的内容
      */
     @SuppressLint("InflateParams")
-    fun <T> genCard(title: String, content: T) {
+    fun <T> genCard(
+        title: String, content: T,
+        onClick: View.OnClickListener? = null,
+        onLongClick: View.OnLongClickListener? = null
+    ) {
         val card = inflater.inflate(R.layout.card_title, null, false)
         val titleView: TextView = card.findViewById(R.id.cardTitle)
         titleView.text = title
@@ -131,6 +135,15 @@ class GenerateCard constructor(
             }
         }
         contentLayout.addView(contentView)
+
+        if (onClick != null) {
+            card.setOnClickListener(onClick)
+        }
+
+        if (onLongClick != null) {
+            card.setOnLongClickListener(onLongClick)
+        }
+
         cardList.add(card)
     }
 

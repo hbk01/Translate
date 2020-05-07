@@ -16,4 +16,5 @@
     <string name="card_title_error">錯誤</string>
     <string name="card_title_explains">基本釋義</string>
     <string name="card_title_phonetic">音標</string>
+    <string name="card_title_webdict">網絡釋義</string>
 </resources>
