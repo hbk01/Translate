@@ -62,6 +62,7 @@ class GenerateCard constructor(
 
                         player.setOnErrorListener { mp, what, extra ->
                             Log.e("MediaPlayer", "Error: $what/$extra")
+                            mp?.release()
                             true
                         }
                     }
