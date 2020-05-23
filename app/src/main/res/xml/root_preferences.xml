@@ -1,0 +1,17 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/custom_id">
+
+        <EditTextPreference
+            app:key="@string/preference_key_appid"
+            app:title="@string/preference_title_custom_your_appid"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:key="@string/preference_key_appkey"
+            app:title="@string/preference_title_custom_your_appkey"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

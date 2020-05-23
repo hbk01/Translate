@@ -1,17 +1,42 @@
 package cn.hbkcn.translate.basic
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.util.Log
+import androidx.preference.PreferenceManager
+import cn.hbkcn.translate.R
 import okhttp3.FormBody
 import java.security.MessageDigest
 
-class TranslateBody constructor(query: String, from: Language, to: Language) {
+class TranslateBody constructor(context: Context, query: String, from: Language, to: Language) {
+    private val preference: SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(context)
     private val body: HashMap<String, String> = HashMap()
-    private val appId: String = "3cd47726b488d5ad"
-    private val appKey: String = "WiAQEJoYTzUcF9We6HnwkFAy7NByYfMt"
+
+    private val appId: String = with(preference) {
+        val id = getString(context.getString(R.string.preference_key_appid), "")
+        if (id.isNullOrEmpty()) {
+            "3cd47726b488d5ad"
+        } else {
+            id
+        }
+    }
+
+    private val appKey: String = with(preference) {
+        val key = getString(context.getString(R.string.preference_key_appkey), "")
+        if (key.isNullOrEmpty()) {
+            "WiAQEJoYTzUcF9We6HnwkFAy7NByYfMt"
+        } else {
+            key
+        }
+    }
+
 
     init {
         val time = System.currentTimeMillis()
         val salt = time.toString()
         val curtime = (time / 1000).toString()
+        Log.i("App", "{'appId': '${appId}', 'appKey': '${appKey}'}")
         body["q"] = query
         body["from"] = from.code
         body["to"] = to.code
@@ -64,3 +89,4 @@ class TranslateBody constructor(query: String, from: Language, to: Language) {
         }
     }
 }
+

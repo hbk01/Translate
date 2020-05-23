@@ -17,4 +17,12 @@
     <string name="card_title_explains">基本釋義</string>
     <string name="card_title_phonetic">音標</string>
     <string name="card_title_webdict">網絡釋義</string>
+    <string name="menu_about">關於</string>
+    <string name="menu_settings">設置</string>
+    <string name="dialog_ok">確定</string>
+    <string name="custom_id">自定義ID</string>
+    <string name="title_activity_settings">設置</string>
+    <string name="preference_title_custom_your_appid">自定義您的應用ID</string>
+    <string name="preference_title_custom_your_appkey">自定義您的應用密鑰</string>
+    <string name="about_msg">%1$s v%2$s build %3$d.</string>
 </resources>

@@ -17,4 +17,12 @@
     <string name="card_title_phonetic">音标</string>
     <string name="card_title_error">错误</string>
     <string name="card_title_webdict">网络释义</string>
+    <string name="menu_about">关于</string>
+    <string name="menu_settings">设置</string>
+    <string name="dialog_ok">确定</string>
+    <string name="custom_id">自定义ID</string>
+    <string name="title_activity_settings">设置</string>
+    <string name="preference_title_custom_your_appid">自定义您的应用ID</string>
+    <string name="preference_title_custom_your_appkey">自定义您的应用密钥</string>
+    <string name="about_msg">%1$s v%2$s build %3$d.</string>
 </resources>

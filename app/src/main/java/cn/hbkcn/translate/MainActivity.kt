@@ -1,13 +1,18 @@
 package cn.hbkcn.translate
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import cn.hbkcn.translate.basic.Language
 import cn.hbkcn.translate.basic.Translate
 import cn.hbkcn.translate.view.GenerateCard
+import cn.hbkcn.translate.view.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var from: Spinner
@@ -33,6 +38,8 @@ class MainActivity : AppCompatActivity() {
      * 最后地输入
      */
     private var lastInput: String = ""
+    private var lastToLanguage: Language = Language.AUTO
+    private var lastFromLanguage: Language = Language.AUTO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -136,9 +143,14 @@ class MainActivity : AppCompatActivity() {
 
         translateBtn.setOnClickListener {
             val input = editText.text.toString()
-            if (input != lastInput) {
+            if (lastInput != input ||
+                lastToLanguage != toLanguage ||
+                lastFromLanguage != fromLanguage
+            ) { // 只要有一个变动就进行翻译操作
                 lastInput = input
-                translate.translate(input, fromLanguage, toLanguage) {
+                lastToLanguage = toLanguage
+                lastFromLanguage = fromLanguage
+                translate.translate(this, input, fromLanguage, toLanguage) {
                     runOnUiThread {
                         GenerateCard(this, layoutInflater, it).run(content)
                     }
@@ -147,4 +159,33 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menu?.add(R.string.menu_settings)
+        menu?.add(R.string.menu_about)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.title) {
+            getString(R.string.menu_settings) -> {
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
+            }
+            getString(R.string.menu_about) -> {
+                AlertDialog.Builder(this)
+                    .setTitle(R.string.menu_about)
+                    .setMessage(
+                        getString(R.string.about_msg).format(
+                            getString(R.string.app_name),
+                            BuildConfig.VERSION_NAME,
+                            BuildConfig.VERSION_CODE
+                        )
+                    )
+                    .setPositiveButton(R.string.dialog_ok, null)
+                    .create()
+                    .show()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }
