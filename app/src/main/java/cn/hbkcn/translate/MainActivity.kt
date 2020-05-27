@@ -150,6 +150,12 @@ class MainActivity : AppCompatActivity() {
                 lastInput = input
                 lastToLanguage = toLanguage
                 lastFromLanguage = fromLanguage
+
+                // added at v2.0.1, remove all views and add progress.
+                content.removeAllViews()
+                val progress = ProgressBar(this)
+                content.addView(progress)
+
                 translate.translate(this, input, fromLanguage, toLanguage) {
                     runOnUiThread {
                         GenerateCard(this, layoutInflater, it).run(content)
