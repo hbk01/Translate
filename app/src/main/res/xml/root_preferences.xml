@@ -5,11 +5,13 @@
         <EditTextPreference
             app:key="@string/preference_key_appid"
             app:title="@string/preference_title_custom_your_appid"
+            app:icon="@drawable/ic_chevron_right_black_24dp"
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
             app:key="@string/preference_key_appkey"
             app:title="@string/preference_title_custom_your_appkey"
+            app:icon="@drawable/ic_chevron_right_black_24dp"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>

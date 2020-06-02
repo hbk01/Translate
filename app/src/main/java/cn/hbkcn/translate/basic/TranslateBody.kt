@@ -31,7 +31,6 @@ class TranslateBody constructor(context: Context, query: String, from: Language,
         }
     }
 
-
     init {
         val time = System.currentTimeMillis()
         val salt = time.toString()
@@ -59,7 +58,7 @@ class TranslateBody constructor(context: Context, query: String, from: Language,
     }
 
     private fun sign(query: String, salt: String, curtime: String): String {
-        val input: String = with(java.lang.StringBuilder()) {
+        val input: String = with(StringBuilder()) {
             if (query.length > 20) {
                 append(query.substring(0..10))
                 append(query.length)
