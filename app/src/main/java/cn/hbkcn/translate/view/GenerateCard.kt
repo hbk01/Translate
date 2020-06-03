@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import cn.hbkcn.translate.R
+import cn.hbkcn.translate.basic.Errors
 import cn.hbkcn.translate.basic.Response
 
 /**
@@ -76,7 +77,14 @@ class GenerateCard constructor(
                 genCard(getString(R.string.card_title_webdict), response.getWebDict())
             }
         } else {
-            genCard(getString(R.string.card_title_error), response.getErrorCode())
+            // 查询错误码，显示错误
+            genCard(getString(R.string.card_title_error), StringBuilder().run {
+                val msg: String = Errors(context, response.getErrorCode()).toString()
+                append(getString(R.string.error_code).format(response.getErrorCode()))
+                append(System.lineSeparator())
+                append(getString(R.string.error_msg).format(msg))
+                toString()
+            })
         }
 
         // 把 list 里的卡片添加进容器

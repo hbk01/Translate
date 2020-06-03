@@ -25,4 +25,7 @@
     <string name="preference_title_custom_your_appid">自定義您的應用ID</string>
     <string name="preference_title_custom_your_appkey">自定義您的應用密鑰</string>
     <string name="about_msg">%1$s v%2$s build %3$d.</string>
+    <string name="error_msg">錯誤信息：%1$s</string>
+    <string name="error_code">錯誤代碼：%1$s</string>
+    <string name="unknown_error">未知錯誤</string>
 </resources>

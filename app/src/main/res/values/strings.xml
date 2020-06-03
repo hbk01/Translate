@@ -29,4 +29,7 @@
     <string name="preference_title_custom_your_appid">Custom your AppId</string>
     <string name="preference_title_custom_your_appkey">Custom your AppKey</string>
     <string name="about_msg">%1$s v%2$s build %3$d.</string>
+    <string name="error_code">Error Code: %1$s</string>
+    <string name="error_msg">Error Message: %1$s</string>
+    <string name="unknown_error">Unknown Error</string>
 </resources>

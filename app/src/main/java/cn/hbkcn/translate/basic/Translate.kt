@@ -34,8 +34,9 @@ class Translate {
             .build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                // val json = """{"errorCode":"-1", "errorMsg":"${e.message}"}"""
                 Log.e("HTTP", "request error", e)
+                val json = """{"errorCode":"100"}"""
+                callback.invoke(TranslateResponse(json))
             }
 
             override fun onResponse(call: Call, response: Response) {
