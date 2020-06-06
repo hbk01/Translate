@@ -1,18 +1,32 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/custom_id">
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/preference_catalog_custom_id">
 
         <EditTextPreference
+            app:icon="@drawable/ic_id_24dp"
             app:key="@string/preference_key_appid"
             app:title="@string/preference_title_custom_your_appid"
-            app:icon="@drawable/ic_chevron_right_black_24dp"
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
+            app:icon="@drawable/ic_key_24dp"
             app:key="@string/preference_key_appkey"
             app:title="@string/preference_title_custom_your_appkey"
-            app:icon="@drawable/ic_chevron_right_black_24dp"
             app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/preference_catalog_log">
+
+        <SwitchPreference
+            app:icon="@drawable/ic_log_24dp"
+            app:key="@string/preference_key_log"
+            app:summary="@string/preference_summary_log"
+            app:title="@string/preference_title_open_log_mode" />
 
     </PreferenceCategory>
 

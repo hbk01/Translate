@@ -5,5 +5,5 @@
     android:layout_height="48dp"
     android:textAppearance="?android:attr/textAppearanceListItemSmall"
     android:gravity="center_horizontal|center_vertical"
-    android:textColor="@color/colorPrimary" />
+    android:textColor="@color/colorBlack" />
 

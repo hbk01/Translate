@@ -1,20 +1,20 @@
-[
-  {
-    "outputType": {
-      "type": "APK"
-    },
-    "apkData": {
-      "type": "MAIN",
-      "splits": [],
-      "versionCode": 21,
-      "versionName": "2.0.1",
+{
+  "version": 1,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "cn.hbkcn.translate",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "properties": [],
+      "versionCode": 22,
+      "versionName": "22",
       "enabled": true,
-      "outputFile": "Translate_v2.0.1.apk",
-      "fullName": "release",
-      "baseName": "release",
-      "dirName": ""
-    },
-    "path": "Translate_v2.0.1.apk",
-    "properties": {}
-  }
-]
+      "outputFile": "Translate_v2.0.2.apk"
+    }
+  ]
+}

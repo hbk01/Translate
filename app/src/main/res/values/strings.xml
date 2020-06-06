@@ -23,7 +23,7 @@
     <string name="menu_settings">Settings</string>
     <string name="dialog_ok">OK</string>
     <string name="title_activity_settings">Settings</string>
-    <string name="custom_id">Custom ID</string>
+    <string name="preference_catalog_custom_id">Custom ID</string>
     <string name="preference_key_appid" translatable="false">appid</string>
     <string name="preference_key_appkey" translatable="false">appkey</string>
     <string name="preference_title_custom_your_appid">Custom your AppId</string>
@@ -32,4 +32,8 @@
     <string name="error_code">Error Code: %1$s</string>
     <string name="error_msg">Error Message: %1$s</string>
     <string name="unknown_error">Unknown Error</string>
+    <string name="preference_key_log" translatable="false">log</string>
+    <string name="preference_title_open_log_mode">Open log mode</string>
+    <string name="preference_catalog_log">Log</string>
+    <string name="preference_summary_log">Develop options</string>
 </resources>

@@ -20,7 +20,7 @@
     <string name="menu_about">关于</string>
     <string name="menu_settings">设置</string>
     <string name="dialog_ok">确定</string>
-    <string name="custom_id">自定义ID</string>
+    <string name="preference_catalog_custom_id">自定义ID</string>
     <string name="title_activity_settings">设置</string>
     <string name="preference_title_custom_your_appid">自定义您的应用ID</string>
     <string name="preference_title_custom_your_appkey">自定义您的应用密钥</string>
@@ -28,4 +28,7 @@
     <string name="error_code">错误代码：%1$s</string>
     <string name="error_msg">错误信息：%1$s</string>
     <string name="unknown_error">未知错误</string>
+    <string name="preference_title_open_log_mode">打开日志模式</string>
+    <string name="preference_catalog_log">日志</string>
+    <string name="preference_summary_log">开发者选项</string>
 </resources>
