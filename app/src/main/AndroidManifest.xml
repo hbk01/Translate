@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="cn.hbkcn.translate">
-
     <!-- 网络 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -16,9 +15,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+
+        <activity
+            android:name=".view.LogActivity"
+            android:label="@string/preference_catalog_log" />
+
         <activity
             android:name=".view.SettingsActivity"
             android:label="@string/title_activity_settings" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,6 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

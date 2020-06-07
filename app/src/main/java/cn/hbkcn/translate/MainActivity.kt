@@ -3,15 +3,18 @@ package cn.hbkcn.translate
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import cn.hbkcn.translate.basic.Language
 import cn.hbkcn.translate.basic.Translate
 import cn.hbkcn.translate.view.GenerateCard
+import cn.hbkcn.translate.view.LogActivity
 import cn.hbkcn.translate.view.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +24,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var editText: EditText
     private lateinit var translateBtn: Button
     private lateinit var content: LinearLayout
+
+    /**
+     * Log记录器
+     */
+    private lateinit var log: Log
 
     /**
      * 选择语言
@@ -44,6 +52,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        log = Log(this, "MainActivity")
         initial()
     }
 
@@ -52,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         /**
          * 初始化控件
          */
+        log.info("Initial widgets")
         from = findViewById(R.id.from)
         to = findViewById(R.id.to)
         swap = findViewById(R.id.swap)
@@ -62,6 +72,7 @@ class MainActivity : AppCompatActivity() {
         /**
          * 初始化适配器
          */
+        log.info("Initial language adapter")
         val lanMap: LinkedHashMap<String, String> = LinkedHashMap()
         with(lanMap) {
             put(getString(R.string.lan_auto), "auto")
@@ -74,11 +85,13 @@ class MainActivity : AppCompatActivity() {
             put(getString(R.string.lan_de), "de")
         }
 
+        log.info("Set language adapter to widgets.")
         val data = lanMap.keys.toList()
         val adapter: ArrayAdapter<String> = ArrayAdapter(this, R.layout.spinner_item, data)
         from.adapter = adapter
         to.adapter = adapter
 
+        log.info("Add first card.")
         val cardView = layoutInflater.inflate(R.layout.card_title, null)
         val cardTitle: TextView = cardView.findViewById(R.id.cardTitle)
         cardTitle.append(getString(R.string.default_tip))
@@ -142,6 +155,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         translateBtn.setOnClickListener {
+            log.info("Translate button clicked.")
             val input = editText.text.toString()
             if (lastInput != input ||
                 lastToLanguage != toLanguage ||
@@ -156,6 +170,7 @@ class MainActivity : AppCompatActivity() {
                 val progress = ProgressBar(this)
                 content.addView(progress)
 
+                log.info("Translate: %s, Language: %s-%s".format(input, fromLanguage.code, toLanguage.code))
                 translate.translate(this, input, fromLanguage, toLanguage) {
                     runOnUiThread {
                         GenerateCard(this, layoutInflater, it).run(content)
@@ -168,6 +183,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menu?.add(R.string.menu_settings)
         menu?.add(R.string.menu_about)
+        val preference: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val logMode: Boolean = preference.getBoolean(getString(R.string.preference_key_log), false)
+        if (logMode) {
+            menu?.add(R.string.preference_catalog_log)
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -190,6 +210,9 @@ class MainActivity : AppCompatActivity() {
                     .setPositiveButton(R.string.dialog_ok, null)
                     .create()
                     .show()
+            }
+            getString(R.string.preference_catalog_log) -> {
+                startActivity(Intent(this, LogActivity::class.java))
             }
         }
         return super.onOptionsItemSelected(item)

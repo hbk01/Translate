@@ -3,12 +3,12 @@ package cn.hbkcn.translate.view
 import android.annotation.SuppressLint
 import android.content.Context
 import android.media.MediaPlayer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import cn.hbkcn.translate.Log
 import cn.hbkcn.translate.R
 import cn.hbkcn.translate.basic.Errors
 import cn.hbkcn.translate.basic.Response
@@ -25,12 +25,14 @@ class GenerateCard constructor(
     private val response: Response
 ) {
     private val cardList = ArrayList<View>()
+    private val log: Log = Log(context, "GenerateCard")
 
     fun run(root: LinearLayout) {
         root.removeAllViews()
         cardList.clear()
         if (response.getErrorCode() == "0") {
             if (response.getExplains().isNotEmpty()) {
+                log.info("Explains: ${response.getExplains()}")
                 genCard(getString(R.string.card_title_explains), response.getExplains())
             }
 
@@ -62,7 +64,7 @@ class GenerateCard constructor(
                         player.setOnCompletionListener { it.release() }
 
                         player.setOnErrorListener { mp, what, extra ->
-                            Log.e("MediaPlayer", "Error: $what/$extra")
+                            log.error("MediaPlayer", RuntimeException("$what/$extra"))
                             mp?.release()
                             true
                         }
@@ -73,11 +75,12 @@ class GenerateCard constructor(
             }
 
             if (response.getWebDict().isNotEmpty()) {
-                Log.e("WebDict", response.getWebDict().toString())
+                log.info("WebDict: ${response.getWebDict()}")
                 genCard(getString(R.string.card_title_webdict), response.getWebDict())
             }
         } else {
             // 查询错误码，显示错误
+            log.info("Error: ${response.getErrorCode()}")
             genCard(getString(R.string.card_title_error), StringBuilder().run {
                 val msg: String = Errors(context, response.getErrorCode()).toString()
                 append(getString(R.string.error_code).format(response.getErrorCode()))
@@ -113,12 +116,12 @@ class GenerateCard constructor(
 
         when (content) {
             is String -> {
-                Log.i("content", "is String.")
+                log.info("add new content(type: String)")
                 contentView = TextView(context)
                 contentView.text = content
             }
             is Collection<*> -> {
-                Log.i("content", "is Collection.")
+                log.info("add new content(type: Collection)")
                 contentView = TextView(context)
                 content.forEach {
                     (contentView as TextView).append(it.toString())
@@ -130,17 +133,23 @@ class GenerateCard constructor(
                 contentView.text = contentView.text.removeSuffix(System.lineSeparator())
             }
             is Map<*, *> -> {
-                Log.i("content", "is Map.")
+                log.info("add new content(type: Map)")
                 contentView = TextView(context)
-                content.entries.forEach {
-                    (contentView as TextView).append(it.key.toString() + ":" + it.value.toString())
+                content.forEach {
+                    (contentView as TextView).append(it.toString())
                     (contentView as TextView).append(System.lineSeparator())
+                    (contentView as TextView).append(System.lineSeparator())
+                    contentView = TextView(context)
+                    content.entries.forEach {
+                        (contentView as TextView).append(it.key.toString() + ":" + it.value.toString())
+                        (contentView as TextView).append(System.lineSeparator())
+                    }
                 }
             }
             is View -> {
-                Log.i("content", "is View.")
+                log.info("add new content(type: View)")
                 contentView = LinearLayout(context)
-                contentView.addView(content)
+                (contentView as LinearLayout).addView(content)
             }
         }
         contentLayout.addView(contentView)

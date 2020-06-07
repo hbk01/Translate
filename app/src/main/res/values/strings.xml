@@ -35,5 +35,5 @@
     <string name="preference_key_log" translatable="false">log</string>
     <string name="preference_title_open_log_mode">Open log mode</string>
     <string name="preference_catalog_log">Log</string>
-    <string name="preference_summary_log">Develop options</string>
+    <string name="preference_summary_log">Develop options, Effective next time</string>
 </resources>
