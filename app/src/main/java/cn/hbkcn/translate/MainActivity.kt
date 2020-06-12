@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import cn.hbkcn.translate.basic.Language
 import cn.hbkcn.translate.basic.Translate
+import cn.hbkcn.translate.update.Update
 import cn.hbkcn.translate.view.GenerateCard
 import cn.hbkcn.translate.view.LogActivity
 import cn.hbkcn.translate.view.SettingsActivity
@@ -53,7 +54,48 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         log = Log(this, "MainActivity")
+        update()
         initial()
+    }
+
+    private fun update() {
+        val dialog: AlertDialog = AlertDialog.Builder(this)
+            .setMessage("Checking update...")
+            .setCancelable(false)
+            .create()
+        dialog.show()
+
+        Update(this).checkUpdate { response ->
+            // has update
+            log.info("has update: $response")
+            runOnUiThread {
+                dialog.dismiss()
+                AlertDialog.Builder(this)
+                    .setTitle("New Update")
+                    .setMessage(with(StringBuilder()) {
+                        append("版本号：${response.versionName()}")
+                        append(System.lineSeparator())
+                        append("更新时间：${response.updateTime()}")
+                        append(System.lineSeparator())
+                        append("预览版：${if (response.preRelease()) "是" else "否"}")
+                        append(System.lineSeparator())
+                        append(response.body())
+                        toString()
+                    })
+                    .setPositiveButton(R.string.dialog_ok) { _, _ ->
+                        Toast.makeText(this, "Update", Toast.LENGTH_SHORT).show()
+                    }
+                    .setNegativeButton(android.R.string.cancel) { _, _ ->
+                        Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show()
+                    }
+                    .setNeutralButton("Ignore") { _, _ ->
+                        Toast.makeText(this, "Ignore", Toast.LENGTH_SHORT).show()
+                    }
+                    .create()
+                    .show()
+            }
+        }
+
     }
 
     @SuppressLint("InflateParams")
