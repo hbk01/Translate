@@ -19,10 +19,9 @@ import cn.hbkcn.translate.update.Response as UpdateResponse
  * @since 1.0
  */
 class Update(private val context: Context) {
-    private val token = "1632b9fc9ced694e3bc5c942e75f5960"
     private val client = OkHttpClient()
     private val request: Request = with(Request.Builder()) {
-        url("https://gitee.com/api/v5/repos/hbk01/Translate/releases/latest?access_token=$token")
+        url("https://gitee.com/api/v5/repos/hbk01/Translate/releases/latest")
         addHeader("Content-Type", "application/json")
         addHeader("charset", "UTF-8")
         build()
