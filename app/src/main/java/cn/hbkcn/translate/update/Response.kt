@@ -18,7 +18,6 @@ class Response(json: String) {
 
     /**
      * 获取 version code ，直接从 version name 去掉标点符号转换而来
-     * todo: 尝试在 'name' 字段里携带 version code，或者将 version code 改为与解析后一致
      * @return 版本号
      */
     fun versionCode(): Int = versionName().removePrefix("v")

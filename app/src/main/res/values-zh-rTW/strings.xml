@@ -31,4 +31,14 @@
     <string name="preference_title_open_log_mode">打開日志模式</string>
     <string name="preference_catalog_log">日志</string>
     <string name="preference_summary_log">開發者選項，下次啓動生效</string>
+    <string name="update">更新</string>
+    <string name="update_version_name">版本名：v%1$s => %2$s</string>
+    <string name="update_version_code">版本號：%1$d => %2$d</string>
+    <string name="update_time">更新時間：%1$s</string>
+    <string name="update_pre_release">預覽版：</string>
+    <string name="update_true">是</string>
+    <string name="update_false">否</string>
+    <string name="update_change_log">更新内容：</string>
+    <string name="update_website_download">網頁</string>
+    <string name="dialog_cancel">取消</string>
 </resources>

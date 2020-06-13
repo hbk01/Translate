@@ -36,4 +36,14 @@
     <string name="preference_title_open_log_mode">Open log mode</string>
     <string name="preference_catalog_log">Log</string>
     <string name="preference_summary_log">Develop options, Effective next time</string>
+    <string name="update">Update</string>
+    <string name="update_version_name">VersionName: v%1$s => %2$s</string>
+    <string name="update_version_code">VersionCode: %1$d => %2$d</string>
+    <string name="update_time">UpdateTime: %1$s</string>
+    <string name="update_pre_release">IsPreRelease: %1$s</string>
+    <string name="update_true">True</string>
+    <string name="update_false">False</string>
+    <string name="update_change_log">"ChangeLog: "</string>
+    <string name="update_website_download">Website</string>
+    <string name="dialog_cancel">Cancel</string>
 </resources>

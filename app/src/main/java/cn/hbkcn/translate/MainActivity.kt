@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -61,41 +62,64 @@ class MainActivity : AppCompatActivity() {
     private fun update() {
         val dialog: AlertDialog = AlertDialog.Builder(this)
             .setMessage("Checking update...")
-            .setCancelable(false)
             .create()
         dialog.show()
 
         Update(this).checkUpdate { response ->
-            // has update
-            log.info("has update: $response")
             runOnUiThread {
                 dialog.dismiss()
                 AlertDialog.Builder(this)
-                    .setTitle("New Update")
                     .setMessage(with(StringBuilder()) {
-                        append("版本号：${response.versionName()}")
+                        append(getString(R.string.update_version_name).format(BuildConfig.VERSION_NAME, response.versionName()))
                         append(System.lineSeparator())
-                        append("更新时间：${response.updateTime()}")
+                        append(getString(R.string.update_version_code).format(BuildConfig.VERSION_CODE, response.versionCode()))
                         append(System.lineSeparator())
-                        append("预览版：${if (response.preRelease()) "是" else "否"}")
+                        append(getString(R.string.update_time).format(response.updateTime()))
+                        append(System.lineSeparator())
+                        val isPreRelease =
+                            if (response.preRelease())
+                                getString(R.string.update_true)
+                            else
+                                getString(R.string.update_false)
+                        append(getString(R.string.update_pre_release).format(isPreRelease))
+                        append(System.lineSeparator())
+                        append(getString(R.string.update_change_log))
                         append(System.lineSeparator())
                         append(response.body())
                         toString()
                     })
-                    .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                        Toast.makeText(this, "Update", Toast.LENGTH_SHORT).show()
+                    .setPositiveButton(R.string.update) { _, _ ->
+                        // 码云要登录才能下载文件（辣鸡），改用 Github 下载地址
+                        val url = "https://github.com/hbk01/Translate/releases/download/" +
+                                "${response.versionName()}/${response.apkName()}"
+                        Update(this).download(url, response.apkName())
                     }
-                    .setNegativeButton(android.R.string.cancel) { _, _ ->
-                        Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show()
-                    }
-                    .setNeutralButton("Ignore") { _, _ ->
-                        Toast.makeText(this, "Ignore", Toast.LENGTH_SHORT).show()
+                    .setNegativeButton(R.string.dialog_cancel, null)
+                    .setNeutralButton(R.string.update_website_download) { _, _ ->
+                        // 跳转到浏览器，打开下载页面
+                        AlertDialog.Builder(this)
+                            .setMessage(with(java.lang.StringBuilder()) {
+                                append("由于码云下载文件需要登录，所以默认使用的是 github 下载，")
+                                append("而 github 在国内处于半墙状态，下载很不稳定，")
+                                append("所以也提供了码云的下载方式，不过你需要自行登录码云才能开始下载。")
+                                append(System.lineSeparator())
+                                append("点击确定将会打开码云的下载链接，在登录码云后会自动开始下载更新包。")
+                                append(System.lineSeparator())
+                                append(System.lineSeparator())
+                                append("最后说一句，码云真好。")
+                                toString()
+                            })
+                            .setPositiveButton(R.string.dialog_ok) { _, _ ->
+                                val uri = Uri.parse(response.apkUrl())
+                                startActivity(Intent(Intent.ACTION_VIEW, uri))
+                            }
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .create().show()
                     }
                     .create()
                     .show()
             }
         }
-
     }
 
     @SuppressLint("InflateParams")
