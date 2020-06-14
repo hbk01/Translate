@@ -7,7 +7,7 @@ import org.json.JSONObject
  * @author hbk
  * @since 1.0
  */
-class Response(json: String) {
+class Response(private val json: String) {
     private val jsonObject: JSONObject = JSONObject(json)
 
     /**
@@ -155,4 +155,6 @@ class Response(json: String) {
         }
         return list
     }
+
+    override fun toString(): String = json
 }

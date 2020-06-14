@@ -11,9 +11,7 @@ class LogActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log)
-        val log = Log(this, "LogActivity").read()
-        // TODO: 解决因array对象生命周期问题导致的数据被重写问题
-        val array = JSONArray(log)
+        val array = JSONArray(Log().read())
         val format = "%s :: %s :: %s"
 
         (0 until array.length()).forEach {
@@ -21,11 +19,13 @@ class LogActivity : AppCompatActivity() {
             val time = obj.getString("time")
             val tag = obj.getString("tag")
             val msg = obj.getString("msg")
-            if (obj.has("throws")) {
+            val level = obj.getString("level")
+            if (level == "error") {
                 val throws = obj.getString("throws")
                 logText.append(format.format(time, tag, msg) + " :: " + throws)
+            } else {
+                logText.append(format.format(time, tag, msg))
             }
-            logText.append(format.format(time, tag, msg))
             logText.append(System.lineSeparator())
         }
     }

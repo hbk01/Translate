@@ -46,4 +46,8 @@
     <string name="update_change_log">"ChangeLog: "</string>
     <string name="update_website_download">Website</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="preference_catalog_update">Update</string>
+    <string name="preference_key_update" translatable="false">update</string>
+    <string name="preference_summary_update">Check for update when start app.</string>
+    <string name="preference_title_update">Check for update</string>
 </resources>

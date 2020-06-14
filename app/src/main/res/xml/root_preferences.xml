@@ -20,6 +20,19 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
+        app:title="@string/preference_catalog_update">
+
+        <SwitchPreference
+            app:icon="@drawable/ic_update_24dp"
+            app:defaultValue="true"
+            app:key="@string/preference_key_update"
+            app:summary="@string/preference_summary_update"
+            app:title="@string/preference_title_update" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
         app:title="@string/preference_catalog_log">
 
         <SwitchPreference

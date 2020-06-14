@@ -1,9 +1,8 @@
 package cn.hbkcn.translate
 
-import android.content.Context
+import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 import java.text.SimpleDateFormat
@@ -14,51 +13,48 @@ import java.util.*
  * @date 6/7/2020
  * @since 1.0
  */
-class Log(context: Context, private val tag: String) {
-    private val dateTimeFormat = "YYYY-MM-dd HH:mm:ss.SSS"
-    private val formatter = SimpleDateFormat(dateTimeFormat, Locale.CHINA)
+class Log {
+    private val formatter = SimpleDateFormat("HH:mm:ss", Locale.CHINA)
+    private val path = App.getContext().externalCacheDir?.absolutePath.toString()
+    private val fileName = SimpleDateFormat("YYYYMMdd", Locale.CHINA).format(Date()) + ".log"
     private val data = JSONArray()
-    private val logPath = "%s%s%s.log".format(
-        context.externalCacheDir?.absolutePath,
-        File.separator,
-        SimpleDateFormat("YYYYMMdd", Locale.CHINA).format(Date())
-    )
 
-    fun info(msg: String) {
+    fun info(clazz: Class<Any>, msg: String) {
+        Log.i(clazz.simpleName, msg)
         val info: JSONObject = JSONObject().apply {
+            put("level", "info")
             put("time", formatter.format(Date()))
-            put("tag", tag)
+            put("tag", clazz.simpleName)
             put("msg", msg)
         }
         data.put(info)
-        write()
+        save()
     }
 
-    fun error(msg: String, throws: Throwable) {
+    fun error(clazz: Class<Any>, msg: String, throws: Throwable) {
+        Log.e(clazz.simpleName, msg, throws)
         val info: JSONObject = JSONObject().apply {
+            put("level", "error")
             put("time", formatter.format(Date()))
-            put("tag", tag)
+            put("tag", clazz.simpleName)
             put("msg", msg)
             put("throw", throws.message)
         }
         data.put(info)
-        write()
+        save()
     }
 
-    private fun write() {
-        val writer = FileWriter(File(logPath))
-        writer.write(data.toString())
+    private fun save() {
+        val writer = FileWriter("$path/$fileName")
+        writer.appendln(data.toString())
         writer.flush()
         writer.close()
     }
 
     fun read(): String {
-        val lines = FileReader(File(logPath)).readLines()
-        return with(StringBuilder()) {
-            lines.forEach {
-                append(it)
-            }
-            toString()
-        }
+        val reader = FileReader("$path/$fileName")
+        val text = reader.readText()
+        reader.close()
+        return text
     }
 }

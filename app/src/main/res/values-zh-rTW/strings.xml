@@ -41,4 +41,7 @@
     <string name="update_change_log">更新内容：</string>
     <string name="update_website_download">網頁</string>
     <string name="dialog_cancel">取消</string>
+    <string name="preference_summary_update">啓動程式時檢查更新</string>
+    <string name="preference_catalog_update">更新</string>
+    <string name="preference_title_update">檢查更新</string>
 </resources>
