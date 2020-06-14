@@ -11,10 +11,10 @@
       "type": "SINGLE",
       "filters": [],
       "properties": [],
-      "versionCode": 22,
-      "versionName": "22",
+      "versionCode": 23,
+      "versionName": "23",
       "enabled": true,
-      "outputFile": "Translate_v2.0.2.apk"
+      "outputFile": "Translate_v2.0.3.apk"
     }
   ]
 }
