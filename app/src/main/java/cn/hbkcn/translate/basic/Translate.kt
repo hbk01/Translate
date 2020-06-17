@@ -1,6 +1,5 @@
 package cn.hbkcn.translate.basic
 
-import android.content.Context
 import cn.hbkcn.translate.Log
 import okhttp3.*
 import okhttp3.Response
@@ -21,13 +20,12 @@ class Translate {
      * @author hbk
      */
     fun translate(
-        context: Context,
         query: String,
         from: Language = Language.AUTO,
         to: Language = Language.AUTO,
         callback: (TranslateResponse) -> Unit
     ) {
-        val body = TranslateBody(context, query, from, to)
+        val body = TranslateBody(query, from, to)
         val client = OkHttpClient()
         val request = Request.Builder()
             .url(baseUrl)

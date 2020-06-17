@@ -4,11 +4,13 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.preference.PreferenceManager
+import cn.hbkcn.translate.App
 import cn.hbkcn.translate.R
 import okhttp3.FormBody
 import java.security.MessageDigest
 
-class TranslateBody constructor(context: Context, query: String, from: Language, to: Language) {
+class TranslateBody constructor(query: String, from: Language, to: Language) {
+    private val context: Context = App.getContext()
     private val preference: SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)
     private val body: HashMap<String, String> = HashMap()
@@ -60,7 +62,7 @@ class TranslateBody constructor(context: Context, query: String, from: Language,
     private fun sign(query: String, salt: String, curtime: String): String {
         val input: String = with(StringBuilder()) {
             if (query.length > 20) {
-                append(query.substring(0..10))
+                append(query.substring(0..9))
                 append(query.length)
                 append(query.substring(query.length - 10, query.length))
             } else if (query.length <= 20) {
