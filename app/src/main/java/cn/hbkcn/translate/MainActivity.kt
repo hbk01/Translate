@@ -68,66 +68,74 @@ class MainActivity : AppCompatActivity() {
     private fun update() {
         log.info(javaClass, "Checking update...")
         val dialog: AlertDialog = AlertDialog.Builder(this)
-            .setMessage("Checking update...")
+            .setMessage(R.string.dialog_checking_update)
             .create()
         dialog.show()
 
         Update(this).checkUpdate { response ->
-            runOnUiThread {
-                log.info(javaClass, "Has update: $response")
-                dialog.dismiss()
-                AlertDialog.Builder(this)
-                    .setMessage(with(StringBuilder()) {
-                        append(getString(R.string.update_version_name).format(BuildConfig.VERSION_NAME, response.versionName()))
-                        append(System.lineSeparator())
-                        append(getString(R.string.update_version_code).format(BuildConfig.VERSION_CODE, response.versionCode()))
-                        append(System.lineSeparator())
-                        append(getString(R.string.update_time).format(response.updateTime()))
-                        append(System.lineSeparator())
-                        val isPreRelease =
-                            if (response.preRelease())
-                                getString(R.string.update_true)
-                            else
-                                getString(R.string.update_false)
-                        append(getString(R.string.update_pre_release).format(isPreRelease))
-                        append(System.lineSeparator())
-                        append(getString(R.string.update_change_log))
-                        append(System.lineSeparator())
-                        append(response.body())
-                        toString()
-                    })
-                    .setPositiveButton(R.string.update) { _, _ ->
-                        // 码云要登录才能下载文件（辣鸡），改用 Github 下载地址
-                        val url = "https://github.com/hbk01/Translate/releases/download/" +
-                                "${response.versionName()}/${response.apkName()}"
-                        log.info(javaClass, "Download update: $url")
-                        Update(this).download(url, response.apkName())
-                    }
-                    .setNegativeButton(R.string.dialog_cancel, null)
-                    .setNeutralButton(R.string.update_website_download) { _, _ ->
-                        // 跳转到浏览器，打开下载页面
-                        AlertDialog.Builder(this)
-                            .setMessage(with(java.lang.StringBuilder()) {
-                                append("由于码云下载文件需要登录，所以默认使用的是 github 下载，")
-                                append("而 github 在国内处于半墙状态，下载很不稳定，")
-                                append("所以也提供了码云的下载方式，不过你需要自行登录码云才能开始下载。")
-                                append(System.lineSeparator())
-                                append("点击确定将会打开码云的下载链接，在登录码云后会自动开始下载更新包。")
-                                append(System.lineSeparator())
-                                append(System.lineSeparator())
-                                append("最后说一句，码云真好。")
-                                toString()
-                            })
-                            .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                                log.info(javaClass, "Open url: ${response.apkUrl()}")
-                                val uri = Uri.parse(response.apkUrl())
-                                startActivity(Intent(Intent.ACTION_VIEW, uri))
-                            }
-                            .setNegativeButton(android.R.string.cancel, null)
-                            .create().show()
-                    }
-                    .create()
-                    .show()
+            val code = response.versionCode()
+            if (code > BuildConfig.VERSION_CODE) {
+                runOnUiThread {
+                    log.info(javaClass, "Has update: $response")
+                    dialog.dismiss()
+                    AlertDialog.Builder(this)
+                        .setMessage(with(StringBuilder()) {
+                            append(getString(R.string.update_version_name).format(BuildConfig.VERSION_NAME, response.versionName()))
+                            append(System.lineSeparator())
+                            append(getString(R.string.update_version_code).format(BuildConfig.VERSION_CODE, response.versionCode()))
+                            append(System.lineSeparator())
+                            append(getString(R.string.update_time).format(response.updateTime()))
+                            append(System.lineSeparator())
+                            val isPreRelease =
+                                if (response.preRelease())
+                                    getString(R.string.update_true)
+                                else
+                                    getString(R.string.update_false)
+                            append(getString(R.string.update_pre_release).format(isPreRelease))
+                            append(System.lineSeparator())
+                            append(getString(R.string.update_change_log))
+                            append(System.lineSeparator())
+                            append(response.body())
+                            toString()
+                        })
+                        .setPositiveButton(R.string.update) { _, _ ->
+                            // 码云要登录才能下载文件（辣鸡），改用 Github 下载地址
+                            val url = "https://github.com/hbk01/Translate/releases/download/" +
+                                    "${response.versionName()}/${response.apkName()}"
+                            log.info(javaClass, "Download update: $url")
+                            Update(this).download(url, response.apkName())
+                        }
+                        .setNegativeButton(R.string.dialog_cancel, null)
+                        .setNeutralButton(R.string.update_website_download) { _, _ ->
+                            // 跳转到浏览器，打开下载页面
+                            AlertDialog.Builder(this)
+                                .setMessage(with(java.lang.StringBuilder()) {
+                                    append("由于码云下载文件需要登录，所以默认使用的是 github 下载，")
+                                    append("而 github 在国内处于半墙状态，下载很不稳定，")
+                                    append("所以也提供了码云的下载方式，不过你需要自行登录码云才能开始下载。")
+                                    append(System.lineSeparator())
+                                    append("点击确定将会打开码云的下载链接，在登录码云后会自动开始下载更新包。")
+                                    append(System.lineSeparator())
+                                    append(System.lineSeparator())
+                                    append("最后说一句，码云真好。")
+                                    toString()
+                                })
+                                .setPositiveButton(R.string.dialog_ok) { _, _ ->
+                                    log.info(javaClass, "Open url: ${response.apkUrl()}")
+                                    val uri = Uri.parse(response.apkUrl())
+                                    startActivity(Intent(Intent.ACTION_VIEW, uri))
+                                }
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .create().show()
+                        }
+                        .create()
+                        .show()
+                }
+            } else {
+                runOnUiThread {
+                    Toast.makeText(this, R.string.update_no_update, Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
             }
         }
     }
@@ -221,7 +229,7 @@ class MainActivity : AppCompatActivity() {
 
                 val msg = "Translate: %s, Language: %s-%s"
                 log.info(javaClass, msg.format(input, fromLanguage.code, toLanguage.code))
-                translate.translate(this, input, fromLanguage, toLanguage) {
+                translate.translate(input, fromLanguage, toLanguage) {
                     log.info(javaClass, it.toString())
                     runOnUiThread {
                         GenerateCard(this, layoutInflater, it).run(content)

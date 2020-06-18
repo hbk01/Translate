@@ -44,4 +44,9 @@
     <string name="preference_catalog_update">更新</string>
     <string name="preference_summary_update">启动软件时检查更新</string>
     <string name="preference_title_update">检查更新</string>
+    <string name="card_title_translation">翻译结果</string>
+    <string name="card_title_us_speak">美式音标</string>
+    <string name="card_title_uk_speak">英式音标</string>
+    <string name="dialog_checking_update">检查更新中…</string>
+    <string name="update_no_update">暂无更新</string>
 </resources>

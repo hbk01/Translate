@@ -5,7 +5,6 @@ import android.content.Context
 import android.media.MediaPlayer
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import cn.hbkcn.translate.Log
@@ -36,44 +35,28 @@ class GenerateCard constructor(
                 genCard(getString(R.string.card_title_explains), response.getExplains())
             }
 
+            if (response.getTranslation().isNotEmpty()) {
+                log.info(javaClass, "Translations: ${response.getTranslation()}")
+                genCard(getString(R.string.card_title_translation), response.getTranslation(),
+                    onClick = View.OnClickListener {
+                        playMusic(response.getFromSpeakUrl())
+                    })
+            }
+
             if (response.getUSPhonetic().isNotEmpty()) {
-                log.info(javaClass, "USPhonetic: ${response.getUSPhonetic()}")
-                val con = LinearLayout(context)
-                con.orientation = LinearLayout.VERTICAL
-                con.layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-                )
+                log.info(javaClass, "US Phonetic: ${response.getUSPhonetic()}")
+                genCard(getString(R.string.card_title_us_speak), response.getUSPhonetic(),
+                    onClick = View.OnClickListener {
+                        playMusic(response.getUSPhoneticUrl())
+                    })
+            }
 
-                val usTextView = TextView(context)
-                val ukTextView = TextView(context)
-
-                usTextView.text =
-                    String.format(getString(R.string.us_phonetic), response.getUSPhonetic())
-                ukTextView.text =
-                    String.format(getString(R.string.uk_phonetic), response.getUKPhonetic())
-
-                con.addView(usTextView)
-                con.addView(ukTextView)
-
-                val cardOnClick: View.OnClickListener = View.OnClickListener {
-                    if (response.getFromSpeakUrl().isNotEmpty()) {
-                        log.info(javaClass, "Play phonetic: ${response.getFromSpeakUrl()}")
-                        val player = MediaPlayer()
-                        player.setDataSource(response.getFromSpeakUrl())
-                        player.prepare()
-
-                        player.setOnPreparedListener { it.start() }
-                        player.setOnCompletionListener { it.release() }
-
-                        player.setOnErrorListener { mp, what, extra ->
-                            log.error(javaClass, "MediaPlayer.OnErrorListener", RuntimeException("$what/$extra"))
-                            mp?.release()
-                            true
-                        }
-                    }
-                }
-
-                genCard(getString(R.string.card_title_phonetic), con, cardOnClick)
+            if (response.getUKPhonetic().isNotEmpty()) {
+                log.info(javaClass, "UK Phonetic: ${response.getUKPhonetic()}")
+                genCard(getString(R.string.card_title_uk_speak), response.getUKPhonetic(),
+                    onClick = View.OnClickListener {
+                        playMusic(response.getUKPhoneticUrl())
+                    })
             }
 
             if (response.getWebDict().isNotEmpty()) {
@@ -165,6 +148,22 @@ class GenerateCard constructor(
         }
 
         cardList.add(card)
+    }
+
+    fun playMusic(url: String) {
+        log.info(javaClass, "Play Music: $url")
+        val player = MediaPlayer()
+        player.setDataSource(url)
+        player.prepare()
+
+        player.setOnPreparedListener { it.start() }
+        player.setOnCompletionListener { it.release() }
+
+        player.setOnErrorListener { mp, what, extra ->
+            log.error(javaClass, "MediaPlayer.OnErrorListener", RuntimeException("$what/$extra"))
+            mp?.release()
+            true
+        }
     }
 
     private fun getString(resId: Int): String = context.getString(resId)

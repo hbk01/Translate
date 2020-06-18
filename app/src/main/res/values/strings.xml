@@ -50,4 +50,9 @@
     <string name="preference_key_update" translatable="false">update</string>
     <string name="preference_summary_update">Check for update when start app.</string>
     <string name="preference_title_update">Check for update</string>
+    <string name="card_title_translation">Translation</string>
+    <string name="card_title_us_speak">US Phonetic</string>
+    <string name="card_title_uk_speak">UK Phonetic</string>
+    <string name="dialog_checking_update">Checking update…</string>
+    <string name="update_no_update">No Update</string>
 </resources>

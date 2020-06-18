@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
-import cn.hbkcn.translate.BuildConfig
 import okhttp3.*
 import okhttp3.Response
 import java.io.IOException
@@ -30,15 +29,9 @@ class Update(private val context: Context) {
     private val manager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
     private var downloadId: Long = -1
 
-    fun checkUpdate(ifHasUpdate: (UpdateResponse) -> Unit) {
+    fun checkUpdate(response: (UpdateResponse) -> Unit) {
         connect {
-            if (it != "error") {
-                val response = UpdateResponse(it)
-                val code = response.versionCode()
-                if (code > BuildConfig.VERSION_CODE) {
-                    ifHasUpdate.invoke(response)
-                }
-            }
+            response.invoke(UpdateResponse(it))
         }
     }
 
