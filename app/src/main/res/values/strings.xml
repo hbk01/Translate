@@ -53,4 +53,6 @@
     <string name="card_title_translation">Translation</string>
     <string name="card_title_us_speak">US Phonetic</string>
     <string name="card_title_uk_speak">UK Phonetic</string>
+    <string name="dialog_checking_update">Checking update…</string>
+    <string name="update_no_update">No Update</string>
 </resources>

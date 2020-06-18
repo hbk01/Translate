@@ -47,4 +47,6 @@
     <string name="card_title_translation">翻譯結果</string>
     <string name="card_title_us_speak">美式音標</string>
     <string name="card_title_uk_speak">英式音標</string>
+    <string name="dialog_checking_update">檢查更新中…</string>
+    <string name="update_no_update">暫無更新</string>
 </resources>
