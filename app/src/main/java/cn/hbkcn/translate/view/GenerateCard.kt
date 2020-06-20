@@ -26,6 +26,10 @@ class GenerateCard constructor(
     private val cardList = ArrayList<View>()
     private val log: Log = Log()
 
+    /**
+     * 运行生成卡片
+     * @param root 卡片生成于此 view 里
+     */
     fun run(root: LinearLayout) {
         root.removeAllViews()
         cardList.clear()
@@ -39,7 +43,7 @@ class GenerateCard constructor(
                 log.info(javaClass, "Translations: ${response.getTranslation()}")
                 genCard(getString(R.string.card_title_translation), response.getTranslation(),
                     onClick = View.OnClickListener {
-                        playMusic(response.getFromSpeakUrl())
+                        playMusic(response.getToSpeakUrl())
                     })
             }
 
@@ -150,7 +154,11 @@ class GenerateCard constructor(
         cardList.add(card)
     }
 
-    fun playMusic(url: String) {
+    /**
+     * Play music form url
+     * @param url music url
+     */
+    private fun playMusic(url: String) {
         log.info(javaClass, "Play Music: $url")
         val player = MediaPlayer()
         player.setDataSource(url)
@@ -166,5 +174,9 @@ class GenerateCard constructor(
         }
     }
 
+    /**
+     * Get string form strings.xml
+     * @param resId resource id
+     */
     private fun getString(resId: Int): String = context.getString(resId)
 }
