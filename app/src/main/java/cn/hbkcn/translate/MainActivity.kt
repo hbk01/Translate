@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         if (preference.getBoolean(getString(R.string.preference_key_update), true)) {
             update()
         }
+        // todo: 打开 app 时读取剪切板内容，直接粘贴到输入框中（需用户自行开启该设置）
         initial()
     }
 
@@ -183,7 +184,6 @@ class MainActivity : AppCompatActivity() {
         divider.visibility = View.GONE
         content.addView(cardView)
 
-
         /**
          * 初始化监听器
          */
@@ -236,6 +236,12 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+
+        // Long click translate button to clear text.
+        translateBtn.setOnLongClickListener {
+            editText.setText("")
+            return@setOnLongClickListener true
         }
     }
 
