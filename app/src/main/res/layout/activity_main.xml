@@ -36,7 +36,7 @@
                 android:id="@+id/editText"
                 style="@style/Widget.AppCompat.EditText"
                 android:layout_width="wrap_content"
-                android:layout_height="52dp"
+                android:layout_height="48dp"
                 android:layout_weight="0.99"
                 android:autofillHints="@string/input"
                 android:hint="@string/input"
@@ -47,6 +47,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_weight="0.01"
+                android:gravity="bottom"
                 android:background="@drawable/ic_translate_black_24dp" />
 
         </LinearLayout>
