@@ -18,7 +18,9 @@ class App : Application() {
         private lateinit var app: App
 
         /**
-         * 全局获取 context
+         * Get context in anywhere.
+         * @return context.
+         * @author hbk01
          */
         fun getContext(): Context {
             return app

@@ -71,7 +71,7 @@ class GenerateCard constructor(
             // 查询错误码，显示错误
             log.info(javaClass, "Error: ${response.getErrorCode()}")
             genCard(getString(R.string.card_title_error), StringBuilder().run {
-                val msg: String = Errors(context, response.getErrorCode()).toString()
+                val msg: String = Errors(response.getErrorCode()).toString()
                 append(getString(R.string.error_code).format(response.getErrorCode()))
                 append(System.lineSeparator())
                 append(getString(R.string.error_msg).format(msg))
