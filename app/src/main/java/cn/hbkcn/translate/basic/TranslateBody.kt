@@ -2,7 +2,6 @@ package cn.hbkcn.translate.basic
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.preference.PreferenceManager
 import cn.hbkcn.translate.App
 import cn.hbkcn.translate.R
@@ -14,6 +13,7 @@ class TranslateBody constructor(query: String, from: Language, to: Language) {
     private val preference: SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)
     private val body: HashMap<String, String> = HashMap()
+    val tag = "TranslateBody"
 
     private val appId: String = with(preference) {
         val id = getString(context.getString(R.string.preference_key_appid), "")
@@ -37,7 +37,7 @@ class TranslateBody constructor(query: String, from: Language, to: Language) {
         val time = System.currentTimeMillis()
         val salt = time.toString()
         val curtime = (time / 1000).toString()
-        Log.i("App", "{'appId': '${appId}', 'appKey': '${appKey}'}")
+        App.info(tag, "{'appId': '$appId', 'appKey': '$appKey'}")
         body["q"] = query
         body["from"] = from.code
         body["to"] = to.code

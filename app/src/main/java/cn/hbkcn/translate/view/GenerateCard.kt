@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
-import cn.hbkcn.translate.Log
+import cn.hbkcn.translate.App
 import cn.hbkcn.translate.R
 import cn.hbkcn.translate.basic.Errors
 import cn.hbkcn.translate.basic.Response
@@ -24,7 +24,7 @@ class GenerateCard constructor(
     private val response: Response
 ) {
     private val cardList = ArrayList<View>()
-    private val log: Log = Log()
+    val tag = "GengrateCard"
 
     /**
      * 运行生成卡片
@@ -35,12 +35,12 @@ class GenerateCard constructor(
         cardList.clear()
         if (response.getErrorCode() == "0") {
             if (response.getExplains().isNotEmpty()) {
-                log.info(javaClass, "Explains: ${response.getExplains()}")
+                App.info(tag, "Explains: ${response.getExplains()}")
                 genCard(getString(R.string.card_title_explains), response.getExplains())
             }
 
             if (response.getTranslation().isNotEmpty()) {
-                log.info(javaClass, "Translations: ${response.getTranslation()}")
+                App.info(tag, "Translations: ${response.getTranslation()}")
                 genCard(getString(R.string.card_title_translation), response.getTranslation(),
                     onClick = View.OnClickListener {
                         playMusic(response.getToSpeakUrl())
@@ -48,7 +48,7 @@ class GenerateCard constructor(
             }
 
             if (response.getUSPhonetic().isNotEmpty()) {
-                log.info(javaClass, "US Phonetic: ${response.getUSPhonetic()}")
+                App.info(tag, "US Phonetic: ${response.getUSPhonetic()}")
                 genCard(getString(R.string.card_title_us_speak), response.getUSPhonetic(),
                     onClick = View.OnClickListener {
                         playMusic(response.getUSPhoneticUrl())
@@ -56,7 +56,7 @@ class GenerateCard constructor(
             }
 
             if (response.getUKPhonetic().isNotEmpty()) {
-                log.info(javaClass, "UK Phonetic: ${response.getUKPhonetic()}")
+                App.info(tag, "UK Phonetic: ${response.getUKPhonetic()}")
                 genCard(getString(R.string.card_title_uk_speak), response.getUKPhonetic(),
                     onClick = View.OnClickListener {
                         playMusic(response.getUKPhoneticUrl())
@@ -64,12 +64,12 @@ class GenerateCard constructor(
             }
 
             if (response.getWebDict().isNotEmpty()) {
-                log.info(javaClass, "WebDict: ${response.getWebDict()}")
+                App.info(tag, "WebDict: ${response.getWebDict()}")
                 genCard(getString(R.string.card_title_webdict), response.getWebDict())
             }
         } else {
             // 查询错误码，显示错误
-            log.info(javaClass, "Error: ${response.getErrorCode()}")
+            App.info(tag, "Error: ${response.getErrorCode()}")
             genCard(getString(R.string.card_title_error), StringBuilder().run {
                 val msg: String = Errors(response.getErrorCode()).toString()
                 append(getString(R.string.error_code).format(response.getErrorCode()))
@@ -105,12 +105,12 @@ class GenerateCard constructor(
 
         when (content) {
             is String -> {
-                log.info(javaClass, "add new content(type: String)")
+                App.info(tag, "add new content(type: String)")
                 contentView = TextView(context)
                 contentView.text = content
             }
             is Collection<*> -> {
-                log.info(javaClass, "add new content(type: Collection)")
+                App.info(tag, "add new content(type: Collection)")
                 contentView = TextView(context)
                 content.forEach {
                     (contentView as TextView).append(it.toString())
@@ -122,7 +122,7 @@ class GenerateCard constructor(
                 contentView.text = contentView.text.removeSuffix(System.lineSeparator())
             }
             is Map<*, *> -> {
-                log.info(javaClass, "add new content(type: Map)")
+                App.info(tag, "add new content(type: Map)")
                 contentView = TextView(context)
                 content.forEach {
                     (contentView as TextView).append(it.toString())
@@ -136,7 +136,7 @@ class GenerateCard constructor(
                 }
             }
             is View -> {
-                log.info(javaClass, "add new content(type: View)")
+                App.info(tag, "add new content(type: View)")
                 contentView = LinearLayout(context)
                 (contentView as LinearLayout).addView(content)
             }
@@ -159,7 +159,7 @@ class GenerateCard constructor(
      * @param url music url
      */
     private fun playMusic(url: String) {
-        log.info(javaClass, "Play Music: $url")
+        App.info(tag, "Play Music: $url")
         val player = MediaPlayer()
         player.setDataSource(url)
         player.prepare()
@@ -168,7 +168,7 @@ class GenerateCard constructor(
         player.setOnCompletionListener { it.release() }
 
         player.setOnErrorListener { mp, what, extra ->
-            log.error(javaClass, "MediaPlayer.OnErrorListener", RuntimeException("$what/$extra"))
+            App.error(tag, "MediaPlayer.OnErrorListener", RuntimeException("$what/$extra"))
             mp?.release()
             true
         }

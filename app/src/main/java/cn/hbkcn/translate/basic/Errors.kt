@@ -5,7 +5,7 @@ import cn.hbkcn.translate.R
 
 /**
  * Error code map.
- * @author hbk
+ * @author hbk01
  * @date 6/3/2020
  * @since 1.0
  */

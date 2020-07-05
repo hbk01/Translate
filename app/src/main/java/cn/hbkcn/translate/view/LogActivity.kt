@@ -2,16 +2,15 @@ package cn.hbkcn.translate.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import cn.hbkcn.translate.Log
+import cn.hbkcn.translate.App
 import cn.hbkcn.translate.R
 import kotlinx.android.synthetic.main.activity_log.*
-import org.json.JSONArray
 
 class LogActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log)
-        val array = JSONArray(Log().read())
+        val array = App.readTodayLog()
         val format = "%s :: %s :: %s"
 
         (0 until array.length()).forEach {

@@ -1,6 +1,6 @@
 package cn.hbkcn.translate.basic
 
-import cn.hbkcn.translate.Log
+import cn.hbkcn.translate.App
 import okhttp3.*
 import okhttp3.Response
 import java.io.IOException
@@ -8,7 +8,7 @@ import cn.hbkcn.translate.basic.Response as TranslateResponse
 
 class Translate {
     private val baseUrl = "https://openapi.youdao.com/api"
-    private val log = Log()
+    private val tag = "Translate"
 
     /**
      * translate. full params.
@@ -33,14 +33,14 @@ class Translate {
             .build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                log.error(javaClass, "Network Error", e)
+                App.error(tag, "Network Error", e)
                 val json = """{"errorCode":"100"}"""
                 callback.invoke(TranslateResponse(json))
             }
 
             override fun onResponse(call: Call, response: Response) {
                 response.body?.string()?.let {
-                    log.info(javaClass, it)
+                    App.info(tag, it)
                     callback.invoke(TranslateResponse(it))
                 }
             }
