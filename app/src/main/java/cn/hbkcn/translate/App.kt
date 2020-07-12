@@ -2,7 +2,9 @@ package cn.hbkcn.translate
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
+import androidx.preference.PreferenceManager
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -19,6 +21,7 @@ import java.util.*
 class App : Application() {
     override fun onCreate() {
         app = this
+        preference = PreferenceManager.getDefaultSharedPreferences(this)
         logPath = if (getContext().cacheDir.absolutePath.endsWith("/")) {
             getContext().cacheDir.absolutePath
         } else {
@@ -30,6 +33,8 @@ class App : Application() {
 
     companion object {
         private lateinit var app: App
+        private lateinit var preference: SharedPreferences
+
         private lateinit var logPath: String
         private lateinit var data: JSONArray
         private val formatter = SimpleDateFormat("HH:mm:ss", Locale.CHINA)
@@ -43,6 +48,16 @@ class App : Application() {
         fun getContext(): Context {
             return app
         }
+
+        /**
+         * Get settings in anywhere.
+         * @return SharedPreference
+         */
+        fun getSettings(): SharedPreferences {
+            return preference
+        }
+
+        fun getString(resId: Int): String = app.getString(resId)
 
         /**
          * Log the message as info level.

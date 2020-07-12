@@ -49,4 +49,5 @@
     <string name="card_title_uk_speak">英式音標</string>
     <string name="dialog_checking_update">檢查更新中…</string>
     <string name="update_no_update">暫無更新</string>
+    <string name="preference_title_log_format">日志格式</string>
 </resources>
