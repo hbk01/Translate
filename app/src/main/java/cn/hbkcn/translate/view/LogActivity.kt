@@ -2,30 +2,43 @@ package cn.hbkcn.translate.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import cn.hbkcn.translate.Log
+import cn.hbkcn.translate.App
 import cn.hbkcn.translate.R
 import kotlinx.android.synthetic.main.activity_log.*
-import org.json.JSONArray
 
 class LogActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log)
-        val array = JSONArray(Log().read())
-        val format = "%s :: %s :: %s"
+        val array = App.readTodayLog()
+
+        val defaultFormat = "%time %tag %msg %throws"
+        var format: String = App.getSettings().getString(
+            getString(R.string.preference_key_log_format), defaultFormat
+        ).toString()
+
+        if (format == "") {
+            format = defaultFormat
+        }
 
         (0 until array.length()).forEach {
             val obj = array.getJSONObject(it)
             val time = obj.getString("time")
             val tag = obj.getString("tag")
             val msg = obj.getString("msg")
+
+            val str = format.replace("%time", time)
+                .replace("%tag", tag)
+                .replace("%msg", msg)
+
             val level = obj.getString("level")
             if (level == "error") {
                 val throws = obj.getString("throws")
-                logText.append(format.format(time, tag, msg) + " :: " + throws)
+                logText.append(str.replace("%throws", throws))
             } else {
-                logText.append(format.format(time, tag, msg))
+                logText.append(str.replace("%throws", ""))
             }
+            logText.append(System.lineSeparator())
             logText.append(System.lineSeparator())
         }
     }

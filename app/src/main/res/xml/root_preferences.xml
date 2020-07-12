@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
@@ -40,6 +41,13 @@
             app:key="@string/preference_key_log"
             app:summary="@string/preference_summary_log"
             app:title="@string/preference_title_open_log_mode" />
+
+        <EditTextPreference
+            android:dialogMessage="Can use: ['%time', '%tag', '%msg', '%throws']"
+            app:icon="@drawable/ic_log_format_24dp"
+            app:key="@string/preference_key_log_format"
+            app:title="@string/preference_title_log_format"
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 

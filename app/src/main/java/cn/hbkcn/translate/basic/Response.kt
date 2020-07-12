@@ -53,17 +53,13 @@ class Response(private val json: String) {
      * Get the from speak url. use the url to play voice.
      * @return url
      */
-    fun getFromSpeakUrl(): String {
-        return jsonObject.getString("speakUrl")
-    }
+    fun getFromSpeakUrl(): String = jsonObject.getString("speakUrl")
 
     /**
      * Get the to speak url. use the url to play voice.
      * @return url
      */
-    fun getToSpeakUrl(): String {
-        return jsonObject.getString("tSpeakUrl")
-    }
+    fun getToSpeakUrl(): String = jsonObject.getString("tSpeakUrl")
 
     /**
      * Get the web dict.

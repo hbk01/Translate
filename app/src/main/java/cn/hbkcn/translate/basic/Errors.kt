@@ -1,15 +1,15 @@
 package cn.hbkcn.translate.basic
 
-import android.content.Context
+import cn.hbkcn.translate.App
 import cn.hbkcn.translate.R
 
 /**
  * Error code map.
- * @author hbk
+ * @author hbk01
  * @date 6/3/2020
  * @since 1.0
  */
-class Errors(private val context: Context, private val code: String) {
+class Errors(private val code: String) {
     private val map: HashMap<Int, String> = HashMap<Int, String>().apply {
         // 本程序自定义的错误码
         put(100, "应用程序无法连接到服务器")
@@ -148,7 +148,7 @@ class Errors(private val context: Context, private val code: String) {
 
     override fun toString(): String = map[code.toInt()].run {
         if (isNullOrEmpty()) {
-            context.getString(R.string.unknown_error)
+            App.getContext().getString(R.string.unknown_error)
         } else {
             this.toString()
         }

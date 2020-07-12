@@ -28,9 +28,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var content: LinearLayout
 
     /**
-     * Log记录器
+     * Log tag
      */
-    private val log = Log()
+    val tag = "MainActivity"
 
     /**
      * 获取设置
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun update() {
-        log.info(javaClass, "Checking update...")
+        App.info(tag, "Checking update...")
         val dialog: AlertDialog = AlertDialog.Builder(this)
             .setMessage(R.string.dialog_checking_update)
             .create()
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
             val code = response.versionCode()
             if (code > BuildConfig.VERSION_CODE) {
                 runOnUiThread {
-                    log.info(javaClass, "Has update: $response")
+                    App.info(tag, "Has update: $response")
                     dialog.dismiss()
                     AlertDialog.Builder(this)
                         .setMessage(with(StringBuilder()) {
@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
                             // 码云要登录才能下载文件（辣鸡），改用 Github 下载地址
                             val url = "https://github.com/hbk01/Translate/releases/download/" +
                                     "${response.versionName()}/${response.apkName()}"
-                            log.info(javaClass, "Download update: $url")
+                            App.info(tag, "Download update: $url")
                             Update(this).download(url, response.apkName())
                         }
                         .setNegativeButton(R.string.dialog_cancel, null)
@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
                                     toString()
                                 })
                                 .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                                    log.info(javaClass, "Open url: ${response.apkUrl()}")
+                                    App.info(tag, "Open url: ${response.apkUrl()}")
                                     val uri = Uri.parse(response.apkUrl())
                                     startActivity(Intent(Intent.ACTION_VIEW, uri))
                                 }
@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity() {
         /**
          * 初始化控件
          */
-        log.info(javaClass, "Initial widgets")
+        App.info(tag, "Initial widgets")
         from = findViewById(R.id.from)
         to = findViewById(R.id.to)
         swap = findViewById(R.id.swap)
@@ -157,7 +157,7 @@ class MainActivity : AppCompatActivity() {
         /**
          * 初始化适配器
          */
-        log.info(javaClass, "Initial language adapter")
+        App.info(tag, "Initial language adapter")
         val lanMap: LinkedHashMap<String, String> = LinkedHashMap()
         with(lanMap) {
             put(getString(R.string.lan_auto), "auto")
@@ -170,13 +170,13 @@ class MainActivity : AppCompatActivity() {
             put(getString(R.string.lan_de), "de")
         }
 
-        log.info(javaClass, "Set language adapter to widgets.")
+        App.info(tag, "Set language adapter to widgets.")
         val data = lanMap.keys.toList()
         val adapter: ArrayAdapter<String> = ArrayAdapter(this, R.layout.spinner_item, data)
         from.adapter = adapter
         to.adapter = adapter
 
-        log.info(javaClass, "Add first card.")
+        App.info(tag, "Add first card.")
         val cardView = layoutInflater.inflate(R.layout.card_title, null)
         val cardTitle: TextView = cardView.findViewById(R.id.cardTitle)
         cardTitle.append(getString(R.string.default_tip))
@@ -187,7 +187,7 @@ class MainActivity : AppCompatActivity() {
         /**
          * 初始化监听器
          */
-        log.info(javaClass, "Initial widgets listener.")
+        App.info(tag, "Initial widgets listener.")
         from.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
@@ -228,9 +228,9 @@ class MainActivity : AppCompatActivity() {
                 content.addView(progress)
 
                 val msg = "Translate: %s, Language: %s-%s"
-                log.info(javaClass, msg.format(input, fromLanguage.code, toLanguage.code))
+                App.info(tag, msg.format(input, fromLanguage.code, toLanguage.code))
                 translate.translate(input, fromLanguage, toLanguage) {
-                    log.info(javaClass, it.toString())
+                    App.info(tag, it.toString())
                     runOnUiThread {
                         GenerateCard(this, layoutInflater, it).run(content)
                     }
