@@ -57,4 +57,8 @@
     <string name="update_no_update">No Update</string>
     <string name="preference_key_log_format" translatable="false">log_format</string>
     <string name="preference_title_log_format">Log Format</string>
+    <string name="preference_summary_clipboard">Copy your clipboard content to editor when starting program.</string>
+    <string name="preference_key_clipboard" translatable="false">clipboard</string>
+    <string name="preference_catalog_general">General</string>
+    <string name="preference_title_auto_put">Auto Put</string>
 </resources>

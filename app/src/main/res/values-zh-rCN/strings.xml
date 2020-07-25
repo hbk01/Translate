@@ -50,4 +50,7 @@
     <string name="dialog_checking_update">检查更新中…</string>
     <string name="update_no_update">暂无更新</string>
     <string name="preference_title_log_format">日志格式</string>
+    <string name="preference_summary_clipboard">启动程序时复制您剪切板的内容到编辑框</string>
+    <string name="preference_catalog_general">常规</string>
+    <string name="preference_title_auto_put">自动放入</string>
 </resources>

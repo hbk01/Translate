@@ -2,6 +2,8 @@ package cn.hbkcn.translate
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -64,6 +66,32 @@ class MainActivity : AppCompatActivity() {
         }
         // todo: 打开 app 时读取剪切板内容，直接粘贴到输入框中（需用户自行开启该设置）
         initial()
+
+        if (preference.getBoolean(getString(R.string.preference_key_clipboard), false)) {
+            putClipboardDataToEditor()
+        }
+    }
+
+    override fun onResume() {
+        putClipboardDataToEditor()
+        super.onResume()
+    }
+
+
+    /**
+     * Get the clipboard data when starting the application.
+     * @return clipboard string.
+     */
+    private fun putClipboardDataToEditor(): String {
+        // Get clipboard data.
+        window.decorView.post {
+            val manager: ClipboardManager = this.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            if (manager.hasPrimaryClip() && manager.primaryClip!!.itemCount > 0) {
+                val text = manager.primaryClip!!.getItemAt(0).text.toString()
+                this.editText.setText(text)
+            }
+        }
+        return ""
     }
 
     private fun update() {
@@ -85,14 +113,14 @@ class MainActivity : AppCompatActivity() {
                             append(System.lineSeparator())
                             append(getString(R.string.update_version_code).format(BuildConfig.VERSION_CODE, response.versionCode()))
                             append(System.lineSeparator())
-                            append(getString(R.string.update_time).format(response.updateTime()))
-                            append(System.lineSeparator())
                             val isPreRelease =
                                 if (response.preRelease())
                                     getString(R.string.update_true)
                                 else
                                     getString(R.string.update_false)
                             append(getString(R.string.update_pre_release).format(isPreRelease))
+                            append(System.lineSeparator())
+                            append(getString(R.string.update_time).format(response.updateTime()))
                             append(System.lineSeparator())
                             append(getString(R.string.update_change_log))
                             append(System.lineSeparator())
@@ -118,7 +146,7 @@ class MainActivity : AppCompatActivity() {
                                     append("点击确定将会打开码云的下载链接，在登录码云后会自动开始下载更新包。")
                                     append(System.lineSeparator())
                                     append(System.lineSeparator())
-                                    append("最后说一句，码云真好。")
+                                    append("最后说一句，码云真好。:)")
                                     toString()
                                 })
                                 .setPositiveButton(R.string.dialog_ok) { _, _ ->
