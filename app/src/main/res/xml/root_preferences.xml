@@ -24,8 +24,8 @@
         app:title="@string/preference_catalog_update">
 
         <SwitchPreference
-            app:icon="@drawable/ic_update_24dp"
             app:defaultValue="true"
+            app:icon="@drawable/ic_update_24dp"
             app:key="@string/preference_key_update"
             app:summary="@string/preference_summary_update"
             app:title="@string/preference_title_update" />
@@ -48,6 +48,18 @@
             app:key="@string/preference_key_log_format"
             app:title="@string/preference_title_log_format"
             app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/preference_catalog_general">
+
+        <SwitchPreference
+            app:icon="@drawable/ic_clipboard_translate_24dp"
+            app:key="@string/preference_key_clipboard"
+            app:summary="@string/preference_summary_clipboard"
+            app:title="@string/preference_title_auto_put" />
 
     </PreferenceCategory>
 
