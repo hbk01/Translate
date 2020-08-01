@@ -64,19 +64,16 @@ class MainActivity : AppCompatActivity() {
         if (preference.getBoolean(getString(R.string.preference_key_update), true)) {
             update()
         }
-        // todo: 打开 app 时读取剪切板内容，直接粘贴到输入框中（需用户自行开启该设置）
-        initial()
 
-        if (preference.getBoolean(getString(R.string.preference_key_clipboard), false)) {
-            putClipboardDataToEditor()
-        }
+        initial()
     }
 
     override fun onResume() {
-        putClipboardDataToEditor()
+        if (preference.getBoolean(getString(R.string.preference_key_clipboard), false)) {
+            putClipboardDataToEditor()
+        }
         super.onResume()
     }
-
 
     /**
      * Get the clipboard data when starting the application.

@@ -1,6 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- Custom App Id -->
     <PreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/preference_catalog_custom_id">
@@ -19,9 +20,16 @@
 
     </PreferenceCategory>
 
+    <!-- General -->
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="@string/preference_catalog_update">
+        app:title="@string/preference_catalog_general">
+
+        <SwitchPreference
+            app:icon="@drawable/ic_clipboard_translate_24dp"
+            app:key="@string/preference_key_clipboard"
+            app:summary="@string/preference_summary_clipboard"
+            app:title="@string/preference_title_auto_put" />
 
         <SwitchPreference
             app:defaultValue="true"
@@ -29,12 +37,6 @@
             app:key="@string/preference_key_update"
             app:summary="@string/preference_summary_update"
             app:title="@string/preference_title_update" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        app:iconSpaceReserved="false"
-        app:title="@string/preference_catalog_log">
 
         <SwitchPreference
             app:icon="@drawable/ic_log_24dp"
@@ -48,18 +50,6 @@
             app:key="@string/preference_key_log_format"
             app:title="@string/preference_title_log_format"
             app:useSimpleSummaryProvider="true" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        app:iconSpaceReserved="false"
-        app:title="@string/preference_catalog_general">
-
-        <SwitchPreference
-            app:icon="@drawable/ic_clipboard_translate_24dp"
-            app:key="@string/preference_key_clipboard"
-            app:summary="@string/preference_summary_clipboard"
-            app:title="@string/preference_title_auto_put" />
 
     </PreferenceCategory>
 
