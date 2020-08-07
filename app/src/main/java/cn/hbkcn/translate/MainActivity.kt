@@ -299,7 +299,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menu?.add(R.string.menu_settings)
-        menu?.add(R.string.menu_about)
+        menu?.add(R.string.menu_problem)
 
         if (preference.getBoolean(getString(R.string.preference_key_log), false)) {
             menu?.add(R.string.preference_catalog_log)
@@ -318,19 +318,16 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
             }
-            getString(R.string.menu_about) -> {
-                AlertDialog.Builder(this)
-                    .setTitle(R.string.menu_about)
-                    .setMessage(
-                        getString(R.string.about_msg).format(
-                            getString(R.string.app_name),
-                            BuildConfig.VERSION_NAME,
-                            BuildConfig.VERSION_CODE
-                        )
-                    )
-                    .setPositiveButton(R.string.dialog_ok, null)
-                    .create()
-                    .show()
+            getString(R.string.menu_problem) -> {
+                val url = "https://gitee.com/hbk01/Translate/blob/master/answer.md"
+                val intent = Intent()
+                intent.action = Intent.ACTION_VIEW
+                intent.data = Uri.parse(url)
+                if (intent.resolveActivity(packageManager) != null) {
+                    startActivity(Intent.createChooser(intent, "Select Browser"))
+                } else {
+                    startActivity(intent)
+                }
             }
             getString(R.string.preference_catalog_log) -> {
                 startActivity(Intent(this, LogActivity::class.java))

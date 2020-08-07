@@ -17,7 +17,7 @@
     <string name="card_title_explains">基本釋義</string>
     <string name="card_title_phonetic">音標</string>
     <string name="card_title_webdict">網絡釋義</string>
-    <string name="menu_about">關於</string>
+    <string name="menu_problem">問題解答</string>
     <string name="menu_settings">設置</string>
     <string name="dialog_ok">確定</string>
     <string name="preference_catalog_custom_id">自定義ID</string>

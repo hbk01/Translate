@@ -17,7 +17,7 @@
     <string name="card_title_phonetic">音标</string>
     <string name="card_title_error">错误</string>
     <string name="card_title_webdict">网络释义</string>
-    <string name="menu_about">关于</string>
+    <string name="menu_problem">问题解答</string>
     <string name="menu_settings">设置</string>
     <string name="dialog_ok">确定</string>
     <string name="preference_catalog_custom_id">自定义ID</string>
