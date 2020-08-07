@@ -20,6 +20,8 @@ import cn.hbkcn.translate.update.Update
 import cn.hbkcn.translate.view.GenerateCard
 import cn.hbkcn.translate.view.LogActivity
 import cn.hbkcn.translate.view.SettingsActivity
+import okhttp3.*
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
     private lateinit var from: Spinner
@@ -32,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     /**
      * Log tag
      */
-    val tag = "MainActivity"
+    private val tag = "MainActivity"
 
     /**
      * 获取设置
@@ -205,6 +207,31 @@ class MainActivity : AppCompatActivity() {
         val cardView = layoutInflater.inflate(R.layout.card_title, null)
         val cardTitle: TextView = cardView.findViewById(R.id.cardTitle)
         cardTitle.append(getString(R.string.default_tip))
+
+        // YiYan
+        if (preference.getBoolean(getString(R.string.preference_key_yi_yan), false)) {
+            Thread {
+                val url = "https://v1.hitokoto.cn?encode=text&charset=utf-8"
+                val client = OkHttpClient()
+                val req: Request = Request.Builder()
+                    .url(url)
+                    .get()
+                    .build()
+                client.newCall(req).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        App.error(tag, "Get YiYan Field.", e)
+                    }
+
+                    override fun onResponse(call: Call, response: Response) {
+                        val yiYan = response.body?.string()
+                        App.info(tag, "YiYan: $yiYan")
+                        runOnUiThread {
+                            cardTitle.text = yiYan
+                        }
+                    }
+                })
+            }.start()
+        }
         val divider: View = cardView.findViewById(R.id.divider)
         divider.visibility = View.GONE
         content.addView(cardView)
@@ -272,7 +299,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menu?.add(R.string.menu_settings)
-        menu?.add(R.string.menu_about)
+        menu?.add(R.string.menu_problem)
 
         if (preference.getBoolean(getString(R.string.preference_key_log), false)) {
             menu?.add(R.string.preference_catalog_log)
@@ -291,19 +318,16 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
             }
-            getString(R.string.menu_about) -> {
-                AlertDialog.Builder(this)
-                    .setTitle(R.string.menu_about)
-                    .setMessage(
-                        getString(R.string.about_msg).format(
-                            getString(R.string.app_name),
-                            BuildConfig.VERSION_NAME,
-                            BuildConfig.VERSION_CODE
-                        )
-                    )
-                    .setPositiveButton(R.string.dialog_ok, null)
-                    .create()
-                    .show()
+            getString(R.string.menu_problem) -> {
+                val url = "https://gitee.com/hbk01/Translate/blob/master/answer.md"
+                val intent = Intent()
+                intent.action = Intent.ACTION_VIEW
+                intent.data = Uri.parse(url)
+                if (intent.resolveActivity(packageManager) != null) {
+                    startActivity(Intent.createChooser(intent, "Select Browser"))
+                } else {
+                    startActivity(intent)
+                }
             }
             getString(R.string.preference_catalog_log) -> {
                 startActivity(Intent(this, LogActivity::class.java))

@@ -19,7 +19,7 @@
     <string name="card_title_explains">Explains</string>
     <string name="card_title_phonetic">Phonetic</string>
     <string name="card_title_webdict">Webdict</string>
-    <string name="menu_about">About</string>
+    <string name="menu_problem">Q and A</string>
     <string name="menu_settings">Settings</string>
     <string name="dialog_ok">OK</string>
     <string name="title_activity_settings">Settings</string>
@@ -61,4 +61,7 @@
     <string name="preference_key_clipboard" translatable="false">clipboard</string>
     <string name="preference_catalog_general">General</string>
     <string name="preference_title_auto_put">Auto Put</string>
+    <string name="preference_key_yi_yan" translatable="false">yiYan</string>
+    <string name="preference_summary_yi_yan">Show Yi Yan when starting program.</string>
+    <string name="preference_title_yi_yan">Yi Yan</string>
 </resources>
