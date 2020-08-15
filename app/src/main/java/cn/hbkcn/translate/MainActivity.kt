@@ -14,6 +14,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
+import cn.hbkcn.translate.basic.Errors
 import cn.hbkcn.translate.basic.Language
 import cn.hbkcn.translate.basic.Translate
 import cn.hbkcn.translate.update.Update
@@ -101,6 +102,15 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
 
         Update(this).checkUpdate { response ->
+            val error = response.errorCode()
+            if (error.isNotEmpty()) {
+                runOnUiThread {
+                    App.error(tag, "Update Error: No Network")
+                    Toast.makeText(this, Errors(error).toString(), Toast.LENGTH_SHORT).show()
+                }
+                dialog.dismiss()
+                return@checkUpdate
+            }
             val code = response.versionCode()
             if (code > BuildConfig.VERSION_CODE) {
                 runOnUiThread {

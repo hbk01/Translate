@@ -11,6 +11,17 @@ class Response(json: String) {
     private val jsonObject = JSONObject(json)
 
     /**
+     * 错误码，目前只用于标记无网络
+     */
+    fun errorCode(): String {
+        return if (jsonObject.has("errorCode")) {
+            jsonObject.getString("errorCode")
+        } else {
+            ""
+        }
+    }
+
+    /**
      * 版本名
      * @return version name.
      */

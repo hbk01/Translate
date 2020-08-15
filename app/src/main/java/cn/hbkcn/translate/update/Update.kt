@@ -79,14 +79,20 @@ class Update(private val context: Context) {
 
     private fun connect(callback: (String) -> Unit) {
         client.newCall(request).enqueue(object : Callback {
+            val errorCode: String = """
+                {
+                    "errorCode": "100"
+                }
+            """.trimIndent()
+
             override fun onFailure(call: Call, e: IOException) {
-                callback.invoke("error")
+                callback.invoke(errorCode)
             }
 
             override fun onResponse(call: Call, response: Response) {
                 val json = response.body?.string()
                 if (json.isNullOrEmpty()) {
-                    callback.invoke("error")
+                    callback.invoke(errorCode)
                 } else {
                     callback.invoke(json)
                 }
