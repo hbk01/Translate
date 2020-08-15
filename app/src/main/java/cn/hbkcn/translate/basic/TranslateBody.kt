@@ -13,7 +13,7 @@ class TranslateBody constructor(query: String, from: Language, to: Language) {
     private val preference: SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)
     private val body: HashMap<String, String> = HashMap()
-    val tag = "TranslateBody"
+    private val tag = "TranslateBody"
 
     private val appId: String = with(preference) {
         val id = getString(context.getString(R.string.preference_key_appid), "")

@@ -24,7 +24,7 @@ class GenerateCard constructor(
     private val response: Response
 ) {
     private val cardList = ArrayList<View>()
-    val tag = "GengrateCard"
+    private val tag = "GenerateCard"
 
     /**
      * 运行生成卡片
@@ -162,7 +162,7 @@ class GenerateCard constructor(
         App.info(tag, "Play Music: $url")
         val player = MediaPlayer()
         player.setDataSource(url)
-        player.prepare()
+        player.prepareAsync()
 
         player.setOnPreparedListener { it.start() }
         player.setOnCompletionListener { it.release() }
