@@ -1,12 +1,15 @@
 package cn.hbkcn.translate.view
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.media.MediaPlayer
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import cn.hbkcn.translate.App
 import cn.hbkcn.translate.R
 import cn.hbkcn.translate.basic.Errors
@@ -93,29 +96,27 @@ class GenerateCard constructor(
     @SuppressLint("InflateParams")
     fun <T> genCard(
         title: String, content: T,
-        onClick: View.OnClickListener? = null,
-        onLongClick: View.OnLongClickListener? = null
+        onClick: View.OnClickListener? = null
     ) {
         val card = inflater.inflate(R.layout.card_title, null, false)
         val titleView: TextView = card.findViewById(R.id.cardTitle)
         titleView.text = title
 
         val contentLayout: LinearLayout = card.findViewById(R.id.cardContent)
-        var contentView: View? = TextView(context)
+        val contentView = TextView(context)
+        contentView.tag = "content"
 
         when (content) {
             is String -> {
                 App.info(tag, "add new content(type: String)")
-                contentView = TextView(context)
                 contentView.text = content
             }
             is Collection<*> -> {
                 App.info(tag, "add new content(type: Collection)")
-                contentView = TextView(context)
                 content.forEach {
-                    (contentView as TextView).append(it.toString())
-                    (contentView as TextView).append(System.lineSeparator())
-                    (contentView as TextView).append(System.lineSeparator())
+                    contentView.append(it.toString())
+                    contentView.append(System.lineSeparator())
+                    contentView.append(System.lineSeparator())
                 }
                 // 删除最后两个空行
                 contentView.text = contentView.text.removeSuffix(System.lineSeparator())
@@ -123,22 +124,19 @@ class GenerateCard constructor(
             }
             is Map<*, *> -> {
                 App.info(tag, "add new content(type: Map)")
-                contentView = TextView(context)
                 content.forEach {
-                    (contentView as TextView).append(it.toString())
-                    (contentView as TextView).append(System.lineSeparator())
-                    (contentView as TextView).append(System.lineSeparator())
-                    contentView = TextView(context)
+                    contentView.append(it.toString())
+                    contentView.append(System.lineSeparator())
+                    contentView.append(System.lineSeparator())
                     content.entries.forEach { entry ->
-                        (contentView as TextView).append(entry.key.toString() + ":" + entry.value.toString())
-                        (contentView as TextView).append(System.lineSeparator())
+                        contentView.append(entry.key.toString() + ":" + entry.value.toString())
+                        contentView.append(System.lineSeparator())
                     }
                 }
             }
             is View -> {
                 App.info(tag, "add new content(type: View)")
-                contentView = LinearLayout(context)
-                (contentView as LinearLayout).addView(content)
+                contentLayout.addView(content)
             }
         }
         contentLayout.addView(contentView)
@@ -147,8 +145,13 @@ class GenerateCard constructor(
             card.setOnClickListener(onClick)
         }
 
-        if (onLongClick != null) {
-            card.setOnLongClickListener(onLongClick)
+        card.setOnLongClickListener {
+            val context = App.getContext()
+            val manager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val textView = it.findViewWithTag<TextView>("content")
+            manager.setPrimaryClip(ClipData.newPlainText("LabelForTranslate", textView.text))
+            Toast.makeText(App.getContext(), R.string.copied, Toast.LENGTH_SHORT).show()
+            return@setOnLongClickListener true
         }
 
         cardList.add(card)

@@ -55,4 +55,5 @@
     <string name="preference_title_auto_put">自動放入</string>
     <string name="preference_summary_yi_yan">啓動程式時顯示一言</string>
     <string name="preference_title_yi_yan">一言</string>
+    <string name="copied">已拷貝</string>
 </resources>

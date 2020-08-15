@@ -64,4 +64,5 @@
     <string name="preference_key_yi_yan" translatable="false">yiYan</string>
     <string name="preference_summary_yi_yan">Show Yi Yan when starting program.</string>
     <string name="preference_title_yi_yan">Yi Yan</string>
+    <string name="copied">Copied</string>
 </resources>
