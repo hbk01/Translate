@@ -8,9 +8,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
@@ -178,7 +176,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("InflateParams")
+    @SuppressLint("InflateParams", "ClickableViewAccessibility")
     private fun initial() {
         /**
          * 初始化控件
@@ -256,7 +254,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val textView: TextView = view as TextView
-                textView.gravity = android.view.Gravity.CENTER
+                textView.gravity = Gravity.CENTER
                 val code = lanMap.getValue(textView.text.toString())
                 fromLanguage = Language.getLanguage(code)
             }
@@ -268,7 +266,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val textView: TextView = view as TextView
-                textView.gravity = android.view.Gravity.CENTER
+                textView.gravity = Gravity.CENTER
                 val code = lanMap.getValue(textView.text.toString())
                 toLanguage = Language.getLanguage(code)
             }
@@ -303,6 +301,24 @@ class MainActivity : AppCompatActivity() {
         translateBtn.setOnLongClickListener {
             editText.setText("")
             return@setOnLongClickListener true
+        }
+
+        val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
+            // 单击时直接调用单击翻译
+            override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+                translateBtn.callOnClick()
+                return true
+            }
+
+            // 双击复制
+            override fun onDoubleTap(e: MotionEvent?): Boolean {
+                putClipboardDataToEditor()
+                return true
+            }
+        })
+
+        translateBtn.setOnTouchListener { v, event ->
+            return@setOnTouchListener gestureDetector.onTouchEvent(event)
         }
     }
 
