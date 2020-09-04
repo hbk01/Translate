@@ -4,10 +4,16 @@
 
 # 软件截图
 
-![MainPage](./screenshots/translate_v2.1.5_mainpage.jpg)
+<figure class="half">
+    <!-- MainPage -->
+    <img src="./screenshots/translate_v2.1.5_mainpage.jpg">
+    <!-- MainPageTranslated -->
+    <img src="./screenshots/translate_v2.1.5_mainpage_translated.jpg">
+</figure>
 
-![MainPageTranslated](./screenshots/translate_v2.1.5_mainpage_translated.jpg)
-
-![Settings](./screenshots/translate_v2.1.5_settings.jpg)
-
-![Log](./screenshots/translate_v2.1.5_log.jpg)
+<figure>
+    <!-- Settings -->
+    <img src="./screenshots/translate_v2.1.5_settings.jpg">
+    <!-- Log -->
+    <img src="./screenshots/translate_v2.1.5_log.jpg">
+</figure>
