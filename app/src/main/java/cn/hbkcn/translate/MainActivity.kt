@@ -292,7 +292,6 @@ class MainActivity : AppCompatActivity() {
                 val msg = "Translate: %s, Language: %s-%s"
                 App.info(tag, msg.format(input, fromLanguage.code, toLanguage.code))
                 translate.translate(input, fromLanguage, toLanguage) {
-                    App.info(tag, it.toString())
                     runOnUiThread {
                         GenerateCard(this, layoutInflater, it).run(content)
                     }
