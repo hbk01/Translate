@@ -60,4 +60,5 @@
     <string name="feedback_tips">下一步將打開瀏覽器訪問網站。\n\n請選擇一個網站。\n\nGitee 中國內使用\nGithub 國內訪問較慢或無法訪問。</string>
     <string name="feedback_github_btn">Github</string>
     <string name="feedback_gitee_btn">Gitee</string>
+    <string name="preference_message_log">\\n使用 \'%time\', \'%tag\', \'%msg\', \'%throws\' 定義你的格式</string>
 </resources>

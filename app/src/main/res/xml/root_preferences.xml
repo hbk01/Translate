@@ -1,5 +1,4 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- Custom App Id -->
     <PreferenceCategory
@@ -44,6 +43,12 @@
             app:summary="@string/preference_summary_update"
             app:title="@string/preference_title_update" />
 
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/preference_catalog_log">
+
         <SwitchPreference
             app:iconSpaceReserved="false"
             app:key="@string/preference_key_log"
@@ -52,7 +57,7 @@
 
         <EditTextPreference
             app:iconSpaceReserved="false"
-            android:dialogMessage="Can use: ['%time', '%tag', '%msg', '%throws']"
+            app:dialogMessage="@string/preference_message_log"
             app:key="@string/preference_key_log_format"
             app:title="@string/preference_title_log_format"
             app:useSimpleSummaryProvider="true" />
