@@ -20,6 +20,11 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# Use diy dictionary.
+-obfuscationdictionary proguard-dict.txt
+-classobfuscationdictionary proguard-dict.txt
+-packageobfuscationdictionary proguard-dict.txt
+
 -dontwarn okhttp3.**
 -dontwarn okio.**
 -dontwarn org.conscrypt.ConscryptHostnameVerifier
