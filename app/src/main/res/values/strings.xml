@@ -26,14 +26,14 @@
     <string name="preference_catalog_custom_id">Custom ID</string>
     <string name="preference_key_appid" translatable="false">appid</string>
     <string name="preference_key_appkey" translatable="false">appkey</string>
-    <string name="preference_title_custom_your_appid">Custom your AppId</string>
-    <string name="preference_title_custom_your_appkey">Custom your AppKey</string>
+    <string name="preference_title_custom_your_appid">Custom Your AppId</string>
+    <string name="preference_title_custom_your_appkey">Custom Your AppKey</string>
     <string name="about_msg">%1$s v%2$s build %3$d.</string>
     <string name="error_code">Error Code: %1$s</string>
     <string name="error_msg">Error Message: %1$s</string>
     <string name="unknown_error">Unknown Error</string>
     <string name="preference_key_log" translatable="false">log</string>
-    <string name="preference_title_open_log_mode">Open log mode</string>
+    <string name="preference_title_open_log_mode">Open Log Mode</string>
     <string name="preference_catalog_log">Log</string>
     <string name="preference_summary_log">Develop options, Effective next time</string>
     <string name="update">Update</string>
@@ -49,7 +49,7 @@
     <string name="preference_catalog_update">Update</string>
     <string name="preference_key_update" translatable="false">update</string>
     <string name="preference_summary_update">Check for update when start app.</string>
-    <string name="preference_title_update">Check for update</string>
+    <string name="preference_title_update">Check Update</string>
     <string name="card_title_translation">Translation</string>
     <string name="card_title_us_speak">US Phonetic</string>
     <string name="card_title_uk_speak">UK Phonetic</string>
@@ -65,4 +65,9 @@
     <string name="preference_summary_yi_yan">Show Yi Yan when starting program.</string>
     <string name="preference_title_yi_yan">Yi Yan</string>
     <string name="copied">Copied</string>
+    <string name="feedback">Feedback</string>
+    <string name="feedback_tips">The next step will open your browser to visit website.\n\nPlease select one website.\n\nGitee for chinese.\nGithub for any people.</string>
+    <string name="feedback_github_btn">Github</string>
+    <string name="feedback_gitee_btn">Gitee</string>
+    <string name="preference_message_log">\\nUse \'%time\', \'%tag\', \'%msg\', \'%throws\' to define your format.</string>
 </resources>

@@ -8,9 +8,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
@@ -178,7 +176,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("InflateParams")
+    @SuppressLint("InflateParams", "ClickableViewAccessibility")
     private fun initial() {
         /**
          * 初始化控件
@@ -256,7 +254,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val textView: TextView = view as TextView
-                textView.gravity = android.view.Gravity.CENTER
+                textView.gravity = Gravity.CENTER
                 val code = lanMap.getValue(textView.text.toString())
                 fromLanguage = Language.getLanguage(code)
             }
@@ -268,7 +266,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val textView: TextView = view as TextView
-                textView.gravity = android.view.Gravity.CENTER
+                textView.gravity = Gravity.CENTER
                 val code = lanMap.getValue(textView.text.toString())
                 toLanguage = Language.getLanguage(code)
             }
@@ -292,7 +290,6 @@ class MainActivity : AppCompatActivity() {
                 val msg = "Translate: %s, Language: %s-%s"
                 App.info(tag, msg.format(input, fromLanguage.code, toLanguage.code))
                 translate.translate(input, fromLanguage, toLanguage) {
-                    App.info(tag, it.toString())
                     runOnUiThread {
                         GenerateCard(this, layoutInflater, it).run(content)
                     }
@@ -305,11 +302,30 @@ class MainActivity : AppCompatActivity() {
             editText.setText("")
             return@setOnLongClickListener true
         }
+
+        val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
+            // 单击时直接调用单击翻译
+            override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+                translateBtn.callOnClick()
+                return true
+            }
+
+            // 双击复制
+            override fun onDoubleTap(e: MotionEvent?): Boolean {
+                putClipboardDataToEditor()
+                return true
+            }
+        })
+
+        translateBtn.setOnTouchListener { _, event ->
+            return@setOnTouchListener gestureDetector.onTouchEvent(event)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menu?.add(R.string.menu_settings)
         menu?.add(R.string.menu_problem)
+        menu?.add(R.string.feedback)
 
         if (preference.getBoolean(getString(R.string.preference_key_log), false)) {
             menu?.add(R.string.preference_catalog_log)
@@ -324,10 +340,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.title) {
-            getString(R.string.menu_settings) -> {
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
-            }
+            getString(R.string.menu_settings) -> startActivity(Intent(this, SettingsActivity::class.java))
             getString(R.string.menu_problem) -> {
                 val url = "https://gitee.com/hbk01/Translate/blob/master/answer.md"
                 val intent = Intent()
@@ -339,12 +352,21 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
-            getString(R.string.preference_catalog_log) -> {
-                startActivity(Intent(this, LogActivity::class.java))
-            }
-            getString(R.string.preference_title_update) -> {
-                update()
-            }
+            getString(R.string.preference_catalog_log) -> startActivity(Intent(this, LogActivity::class.java))
+            getString(R.string.preference_title_update) -> update()
+            getString(R.string.feedback) -> AlertDialog.Builder(this)
+                .setTitle(R.string.feedback)
+                .setMessage(R.string.feedback_tips)
+                .setPositiveButton(R.string.feedback_gitee_btn) { _, _ ->
+                    val url = "https://gitee.com/hbk01/Translate/issues"
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                }
+                .setNegativeButton(R.string.feedback_github_btn) { _, _ ->
+                    val url = "https://github.com/hbk01/Translate/issues"
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                }
+                .create()
+                .show()
         }
         return super.onOptionsItemSelected(item)
     }

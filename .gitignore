@@ -12,4 +12,4 @@
 /captures
 .externalNativeBuild
 .cxx
-apk
+apk/release
