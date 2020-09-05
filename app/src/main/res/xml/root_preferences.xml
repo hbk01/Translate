@@ -7,13 +7,13 @@
         app:title="@string/preference_catalog_custom_id">
 
         <EditTextPreference
-            app:icon="@drawable/ic_id_24dp"
+            app:iconSpaceReserved="false"
             app:key="@string/preference_key_appid"
             app:title="@string/preference_title_custom_your_appid"
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
-            app:icon="@drawable/ic_key_24dp"
+            app:iconSpaceReserved="false"
             app:key="@string/preference_key_appkey"
             app:title="@string/preference_title_custom_your_appkey"
             app:useSimpleSummaryProvider="true" />
@@ -26,33 +26,33 @@
         app:title="@string/preference_catalog_general">
 
         <SwitchPreference
-            app:icon="@drawable/ic_clipboard_translate_24dp"
+            app:iconSpaceReserved="false"
             app:key="@string/preference_key_clipboard"
             app:summary="@string/preference_summary_clipboard"
             app:title="@string/preference_title_auto_put" />
 
         <SwitchPreference
-            app:icon="@drawable/ic_yi_yan_24dp"
+            app:iconSpaceReserved="false"
             app:key="@string/preference_key_yi_yan"
             app:summary="@string/preference_summary_yi_yan"
             app:title="@string/preference_title_yi_yan" />
 
         <SwitchPreference
+            app:iconSpaceReserved="false"
             app:defaultValue="true"
-            app:icon="@drawable/ic_update_24dp"
             app:key="@string/preference_key_update"
             app:summary="@string/preference_summary_update"
             app:title="@string/preference_title_update" />
 
         <SwitchPreference
-            app:icon="@drawable/ic_log_24dp"
+            app:iconSpaceReserved="false"
             app:key="@string/preference_key_log"
             app:summary="@string/preference_summary_log"
             app:title="@string/preference_title_open_log_mode" />
 
         <EditTextPreference
+            app:iconSpaceReserved="false"
             android:dialogMessage="Can use: ['%time', '%tag', '%msg', '%throws']"
-            app:icon="@drawable/ic_log_format_24dp"
             app:key="@string/preference_key_log_format"
             app:title="@string/preference_title_log_format"
             app:useSimpleSummaryProvider="true" />
