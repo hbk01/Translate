@@ -317,7 +317,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        translateBtn.setOnTouchListener { v, event ->
+        translateBtn.setOnTouchListener { _, event ->
             return@setOnTouchListener gestureDetector.onTouchEvent(event)
         }
     }
