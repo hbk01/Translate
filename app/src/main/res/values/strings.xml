@@ -65,4 +65,8 @@
     <string name="preference_summary_yi_yan">Show Yi Yan when starting program.</string>
     <string name="preference_title_yi_yan">Yi Yan</string>
     <string name="copied">Copied</string>
+    <string name="feedback">Feedback</string>
+    <string name="feedback_tips">The next step will open your browser to visit website.\n\nPlease select one website.\n\nGitee for chinese.\nGithub for any people.</string>
+    <string name="feedback_github_btn">Github</string>
+    <string name="feedback_gitee_btn">Gitee</string>
 </resources>
