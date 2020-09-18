@@ -69,5 +69,5 @@
     <string name="feedback_tips">The next step will open your browser to visit website.\nPlease select one website.\n\nGitee for chinese.\nGithub for any people.</string>
     <string name="feedback_github_btn">Github</string>
     <string name="feedback_gitee_btn">Gitee</string>
-    <string name="preference_message_log">\nUse %time, %tag, %msg, %throws to define your format.</string>
+    <string name="preference_message_log">\nUse %time, %tag, %level, %msg, %throws to define your format.</string>
 </resources>
