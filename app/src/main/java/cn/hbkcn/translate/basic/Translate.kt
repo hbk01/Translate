@@ -25,7 +25,7 @@ class Translate {
         to: Language = Language.AUTO,
         callback: (TranslateResponse) -> Unit
     ) {
-        val body = TranslateBody(query, from, to)
+        val body = TranslateBody(query.replace("\n", ""), from, to)
         val client = OkHttpClient()
         val request = Request.Builder()
             .url(baseUrl)
