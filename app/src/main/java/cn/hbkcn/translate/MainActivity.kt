@@ -308,7 +308,9 @@ class MainActivity : AppCompatActivity() {
 
             // 双击复制
             override fun onDoubleTap(e: MotionEvent?): Boolean {
-                putClipboardDataToEditor()
+                if (App.getSettings().getBoolean(getString(R.string.preference_key_double_click_paste), true)) {
+                    putClipboardDataToEditor()
+                }
                 return true
             }
         })

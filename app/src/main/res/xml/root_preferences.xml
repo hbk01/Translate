@@ -26,12 +26,21 @@
 
         <SwitchPreference
             app:iconSpaceReserved="false"
+            app:defaultValue="false"
             app:key="@string/preference_key_clipboard"
             app:summary="@string/preference_summary_clipboard"
             app:title="@string/preference_title_auto_put" />
 
         <SwitchPreference
+            app:defaultValue="true"
             app:iconSpaceReserved="false"
+            app:key="@string/preference_key_double_click_paste"
+            app:summary="@string/preference_summary_double_click_paste"
+            app:title="@string/preference_title_double_click_paste" />
+
+        <SwitchPreference
+            app:iconSpaceReserved="false"
+            app:defaultValue="true"
             app:key="@string/preference_key_yi_yan"
             app:summary="@string/preference_summary_yi_yan"
             app:title="@string/preference_title_yi_yan" />
@@ -51,6 +60,7 @@
 
         <SwitchPreference
             app:iconSpaceReserved="false"
+            app:defaultValue="false"
             app:key="@string/preference_key_log"
             app:summary="@string/preference_summary_log"
             app:title="@string/preference_title_open_log_mode" />

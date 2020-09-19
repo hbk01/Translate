@@ -70,4 +70,7 @@
     <string name="feedback_github_btn">Github</string>
     <string name="feedback_gitee_btn">Gitee</string>
     <string name="preference_message_log">\nUse %time, %tag, %level, %msg, %throws to define your format.</string>
+    <string name="preference_key_double_click_paste" translatable="false">double_click_paste</string>
+    <string name="preference_title_double_click_paste">Double Click Paste</string>
+    <string name="preference_summary_double_click_paste">Double click translate button to paste your clipboard content.</string>
 </resources>
