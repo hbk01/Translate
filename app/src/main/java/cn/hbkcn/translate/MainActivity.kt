@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
     /**
      * 翻译
      */
-    private var translate: Translate = Translate()
+    private val translate: Translate = Translate()
 
     /**
      * 最后地输入
@@ -181,7 +181,6 @@ class MainActivity : AppCompatActivity() {
         /**
          * 初始化控件
          */
-        App.info(tag, "Initial widgets")
         from = findViewById(R.id.from)
         to = findViewById(R.id.to)
         swap = findViewById(R.id.swap)
@@ -192,7 +191,6 @@ class MainActivity : AppCompatActivity() {
         /**
          * 初始化适配器
          */
-        App.info(tag, "Initial language adapter")
         val lanMap: LinkedHashMap<String, String> = LinkedHashMap()
         with(lanMap) {
             put(getString(R.string.lan_auto), "auto")
@@ -205,13 +203,11 @@ class MainActivity : AppCompatActivity() {
             put(getString(R.string.lan_de), "de")
         }
 
-        App.info(tag, "Set language adapter to widgets.")
         val data = lanMap.keys.toList()
         val adapter: ArrayAdapter<String> = ArrayAdapter(this, R.layout.spinner_item, data)
         from.adapter = adapter
         to.adapter = adapter
 
-        App.info(tag, "Add first card.")
         val cardView = layoutInflater.inflate(R.layout.card_title, null)
         val cardTitle: TextView = cardView.findViewById(R.id.cardTitle)
         cardTitle.append(getString(R.string.default_tip))
@@ -247,7 +243,6 @@ class MainActivity : AppCompatActivity() {
         /**
          * 初始化监听器
          */
-        App.info(tag, "Initial widgets listener.")
         from.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
@@ -274,7 +269,8 @@ class MainActivity : AppCompatActivity() {
 
         translateBtn.setOnClickListener {
             val input = editText.text.toString()
-            if (lastInput != input ||
+            if (input != "" ||
+                lastInput != input ||
                 lastToLanguage != toLanguage ||
                 lastFromLanguage != fromLanguage
             ) { // 只要有一个变动就进行翻译操作
@@ -312,7 +308,9 @@ class MainActivity : AppCompatActivity() {
 
             // 双击复制
             override fun onDoubleTap(e: MotionEvent?): Boolean {
-                putClipboardDataToEditor()
+                if (App.getSettings().getBoolean(getString(R.string.preference_key_double_click_paste), true)) {
+                    putClipboardDataToEditor()
+                }
                 return true
             }
         })

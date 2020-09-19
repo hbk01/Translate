@@ -12,7 +12,7 @@ class LogActivity : AppCompatActivity() {
         setContentView(R.layout.activity_log)
         val array = App.readTodayLog()
 
-        val defaultFormat = "%time %tag %msg %throws"
+        val defaultFormat = "%time %tag %level %msg %throws"
         var format: String = App.getSettings().getString(
             getString(R.string.preference_key_log_format), defaultFormat
         ).toString()
@@ -26,12 +26,13 @@ class LogActivity : AppCompatActivity() {
             val time = obj.getString("time")
             val tag = obj.getString("tag")
             val msg = obj.getString("msg")
+            val level = obj.getString("level")
 
             val str = format.replace("%time", time)
                 .replace("%tag", tag)
                 .replace("%msg", msg)
+                .replace("%level", level)
 
-            val level = obj.getString("level")
             if (level == "error") {
                 val throws = obj.getString("throws")
                 logText.append(str.replace("%throws", throws))

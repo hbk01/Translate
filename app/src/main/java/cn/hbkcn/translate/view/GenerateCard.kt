@@ -45,7 +45,7 @@ class GenerateCard constructor(
             if (response.getTranslation().isNotEmpty()) {
                 App.info(tag, "Translations: ${response.getTranslation()}")
                 genCard(getString(R.string.card_title_translation), response.getTranslation(),
-                    onClick = View.OnClickListener {
+                    onClick = {
                         playMusic(response.getToSpeakUrl())
                     })
             }
@@ -53,7 +53,7 @@ class GenerateCard constructor(
             if (response.getUSPhonetic().isNotEmpty()) {
                 App.info(tag, "US Phonetic: ${response.getUSPhonetic()}")
                 genCard(getString(R.string.card_title_us_speak), response.getUSPhonetic(),
-                    onClick = View.OnClickListener {
+                    onClick = {
                         playMusic(response.getUSPhoneticUrl())
                     })
             }
@@ -61,7 +61,7 @@ class GenerateCard constructor(
             if (response.getUKPhonetic().isNotEmpty()) {
                 App.info(tag, "UK Phonetic: ${response.getUKPhonetic()}")
                 genCard(getString(R.string.card_title_uk_speak), response.getUKPhonetic(),
-                    onClick = View.OnClickListener {
+                    onClick = {
                         playMusic(response.getUKPhoneticUrl())
                     })
             }
@@ -72,7 +72,10 @@ class GenerateCard constructor(
             }
         } else {
             // 查询错误码，显示错误
-            App.info(tag, "Error: ${response.getErrorCode()}")
+            App.error(
+                tag, "Error: ${response.getErrorCode()}",
+                RuntimeException("ERROR_CODE=${response.getErrorCode()}")
+            )
             genCard(getString(R.string.card_title_error), StringBuilder().run {
                 val msg: String = Errors(response.getErrorCode()).toString()
                 append(getString(R.string.error_code).format(response.getErrorCode()))
@@ -108,11 +111,11 @@ class GenerateCard constructor(
 
         when (content) {
             is String -> {
-                App.info(tag, "add new content(type: String)")
+                App.info(tag, "add new String")
                 contentView.text = content
             }
             is Collection<*> -> {
-                App.info(tag, "add new content(type: Collection)")
+                App.info(tag, "add new Collection")
                 content.forEach {
                     contentView.append(it.toString())
                     contentView.append(System.lineSeparator())
@@ -123,7 +126,7 @@ class GenerateCard constructor(
                 contentView.text = contentView.text.removeSuffix(System.lineSeparator())
             }
             is Map<*, *> -> {
-                App.info(tag, "add new content(type: Map)")
+                App.info(tag, "add new Map")
                 content.forEach {
                     contentView.append(it.toString())
                     contentView.append(System.lineSeparator())
@@ -135,7 +138,7 @@ class GenerateCard constructor(
                 }
             }
             is View -> {
-                App.info(tag, "add new content(type: View)")
+                App.info(tag, "add new View")
                 contentLayout.addView(content)
             }
         }

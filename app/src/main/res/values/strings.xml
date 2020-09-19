@@ -66,8 +66,11 @@
     <string name="preference_title_yi_yan">Yi Yan</string>
     <string name="copied">Copied</string>
     <string name="feedback">Feedback</string>
-    <string name="feedback_tips">The next step will open your browser to visit website.\n\nPlease select one website.\n\nGitee for chinese.\nGithub for any people.</string>
+    <string name="feedback_tips">The next step will open your browser to visit website.\nPlease select one website.\n\nGitee for chinese.\nGithub for any people.</string>
     <string name="feedback_github_btn">Github</string>
     <string name="feedback_gitee_btn">Gitee</string>
-    <string name="preference_message_log">\\nUse \'%time\', \'%tag\', \'%msg\', \'%throws\' to define your format.</string>
+    <string name="preference_message_log">\nUse %time, %tag, %level, %msg, %throws to define your format.</string>
+    <string name="preference_key_double_click_paste" translatable="false">double_click_paste</string>
+    <string name="preference_title_double_click_paste">Double Click Paste</string>
+    <string name="preference_summary_double_click_paste">Double click translate button to paste your clipboard content.</string>
 </resources>
