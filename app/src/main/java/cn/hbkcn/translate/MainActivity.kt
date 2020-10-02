@@ -62,10 +62,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         preference = PreferenceManager.getDefaultSharedPreferences(this)
-        if (preference.getBoolean(getString(R.string.preference_key_update), true)) {
-            update()
-        }
 
+        // update
+        if (preference.getBoolean(getString(R.string.preference_key_update), true)) update()
+
+        // init application widgets
         initial()
     }
 
@@ -92,6 +93,35 @@ class MainActivity : AppCompatActivity() {
         return ""
     }
 
+    /**
+     * Get yiyan form web
+     * @param callback callback
+     */
+    private fun yiYan(callback: (String) -> Unit) {
+        Thread {
+            val url = "https://v1.hitokoto.cn?encode=text&charset=utf-8"
+            val client = OkHttpClient()
+            val req: Request = Request.Builder().url(url).get().build()
+            client.newCall(req).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    App.error(tag, "Get YiYan Field.", e)
+                    runOnUiThread {
+                        callback.invoke(getString(R.string.default_tip))
+                    }
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val yiYan = response.body?.string() ?: getString(R.string.default_tip)
+                    App.info(tag, "YiYan: $yiYan")
+                    runOnUiThread { callback.invoke(yiYan) }
+                }
+            })
+        }.start()
+    }
+
+    /**
+     * Check update and run update work.
+     */
     private fun update() {
         App.info(tag, "Checking update...")
         val dialog: AlertDialog = AlertDialog.Builder(this)
@@ -211,31 +241,14 @@ class MainActivity : AppCompatActivity() {
         val cardView = layoutInflater.inflate(R.layout.card_title, null)
         val cardTitle: TextView = cardView.findViewById(R.id.cardTitle)
         cardTitle.append(getString(R.string.default_tip))
+        cardView.setOnClickListener {
+            yiYan { cardTitle.text = it }
+        }
 
         // YiYan
-        if (preference.getBoolean(getString(R.string.preference_key_yi_yan), false)) {
-            Thread {
-                val url = "https://v1.hitokoto.cn?encode=text&charset=utf-8"
-                val client = OkHttpClient()
-                val req: Request = Request.Builder()
-                    .url(url)
-                    .get()
-                    .build()
-                client.newCall(req).enqueue(object : Callback {
-                    override fun onFailure(call: Call, e: IOException) {
-                        App.error(tag, "Get YiYan Field.", e)
-                    }
+        if (preference.getBoolean(getString(R.string.preference_key_yi_yan), false)) yiYan { cardTitle.text = it }
 
-                    override fun onResponse(call: Call, response: Response) {
-                        val yiYan = response.body?.string()
-                        App.info(tag, "YiYan: $yiYan")
-                        runOnUiThread {
-                            cardTitle.text = yiYan
-                        }
-                    }
-                })
-            }.start()
-        }
+        // clear divider in card view.
         val divider: View = cardView.findViewById(R.id.divider)
         divider.visibility = View.GONE
         content.addView(cardView)
@@ -301,12 +314,12 @@ class MainActivity : AppCompatActivity() {
 
         val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
             // 单击时直接调用单击翻译
-            override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+            override fun onSingleTapUp(e: MotionEvent?): Boolean {
                 translateBtn.callOnClick()
                 return true
             }
 
-            // 双击复制
+            // 双击粘贴
             override fun onDoubleTap(e: MotionEvent?): Boolean {
                 if (App.getSettings().getBoolean(getString(R.string.preference_key_double_click_paste), true)) {
                     putClipboardDataToEditor()
