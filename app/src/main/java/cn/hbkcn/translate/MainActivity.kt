@@ -314,12 +314,12 @@ class MainActivity : AppCompatActivity() {
 
         val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
             // 单击时直接调用单击翻译
-            override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
-                // translateBtn.callOnClick()
-                return false
+            override fun onSingleTapUp(e: MotionEvent?): Boolean {
+                translateBtn.callOnClick()
+                return true
             }
 
-            // 双击复制
+            // 双击粘贴
             override fun onDoubleTap(e: MotionEvent?): Boolean {
                 if (App.getSettings().getBoolean(getString(R.string.preference_key_double_click_paste), true)) {
                     putClipboardDataToEditor()
