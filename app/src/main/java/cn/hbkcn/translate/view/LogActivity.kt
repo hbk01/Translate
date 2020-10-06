@@ -1,6 +1,10 @@
 package cn.hbkcn.translate.view
 
+import android.graphics.Color
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import androidx.appcompat.app.AppCompatActivity
 import cn.hbkcn.translate.App
 import cn.hbkcn.translate.R
@@ -27,17 +31,23 @@ class LogActivity : AppCompatActivity() {
             val tag = obj.getString("tag")
             val msg = obj.getString("msg")
             val level = obj.getString("level")
+            val throws = obj.optString("throws", "")
 
             val str = format.replace("%time", time)
                 .replace("%tag", tag)
                 .replace("%msg", msg)
                 .replace("%level", level)
+                .replace("%throws", throws)
 
             if (level == "error") {
-                val throws = obj.getString("throws")
-                logText.append(str.replace("%throws", throws))
+                val span = SpannableStringBuilder(str)
+                span.setSpan(
+                    ForegroundColorSpan(Color.RED),
+                    0, str.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                logText.append(span)
             } else {
-                logText.append(str.replace("%throws", ""))
+                logText.append(str)
             }
             logText.append(System.lineSeparator())
             logText.append(System.lineSeparator())

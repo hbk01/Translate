@@ -70,8 +70,10 @@ class App : Application() {
                 put("tag", tag)
                 put("msg", msg)
             }
-            data.put(info)
-            save()
+            synchronized(data) {
+                data.put(info)
+                save()
+            }
         }
 
         /**
@@ -86,8 +88,10 @@ class App : Application() {
                 put("throws", exception.message)
                 put("msg", msg)
             }
-            data.put(error)
-            save()
+            synchronized(data) {
+                data.put(error)
+                save()
+            }
         }
 
         /**

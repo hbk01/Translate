@@ -8,7 +8,12 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.view.*
+import android.os.Handler
+import android.util.Log
+import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
@@ -280,56 +285,53 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        var count = 0
+        val handle = Handler()
         translateBtn.setOnClickListener {
-            val input = editText.text.toString()
-            if (input != "" ||
-                lastInput != input ||
-                lastToLanguage != toLanguage ||
-                lastFromLanguage != fromLanguage
-            ) { // 只要有一个变动就进行翻译操作
-                lastInput = input
-                lastToLanguage = toLanguage
-                lastFromLanguage = fromLanguage
+            count++
+            handle.postDelayed({
+                if (count == 1) {
+                    // single click
+                    Log.e("onTouch", "onClick")
+                    val input = editText.text.toString()
+                    if (input != "" || lastInput != input ||
+                        lastToLanguage != toLanguage ||
+                        lastFromLanguage != fromLanguage
+                    ) { // 只要有一个变动就进行翻译操作
+                        lastInput = input
+                        lastToLanguage = toLanguage
+                        lastFromLanguage = fromLanguage
 
-                // added at v2.0.1, remove all views and add progress.
-                content.removeAllViews()
-                val progress = ProgressBar(this)
-                content.addView(progress)
+                        // added at v2.0.1, remove all views and add progress.
+                        content.removeAllViews()
+                        val progress = ProgressBar(this)
+                        content.addView(progress)
 
-                val msg = "Translate: %s, Language: %s-%s"
-                App.info(tag, msg.format(input, fromLanguage.code, toLanguage.code))
-                translate.translate(input, fromLanguage, toLanguage) {
-                    runOnUiThread {
-                        GenerateCard(this, layoutInflater, it).run(content)
+                        val msg = "Translate: %s, Language: %s-%s"
+                        App.info(tag, msg.format(input, fromLanguage.code, toLanguage.code))
+                        translate.translate(input, fromLanguage, toLanguage) {
+                            runOnUiThread {
+                                GenerateCard(this, layoutInflater, it).run(content)
+                            }
+                        }
+                    }
+                } else if (count == 2) {
+                    // double click
+                    Log.e("onTouch", "onDoubleClick")
+                    if (App.getSettings().getBoolean(getString(R.string.preference_key_double_click_paste), true)) {
+                        putClipboardDataToEditor()
                     }
                 }
-            }
+                count = 0
+                handle.removeCallbacksAndMessages(null)
+            }, 250)
         }
 
-        // Long click translate button to clear text.
+        // Long click translate button to paste text.
         translateBtn.setOnLongClickListener {
+            Log.e("onTouch", "onLongClick")
             editText.setText("")
             return@setOnLongClickListener true
-        }
-
-        val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
-            // 单击时直接调用单击翻译
-            override fun onSingleTapUp(e: MotionEvent?): Boolean {
-                translateBtn.callOnClick()
-                return true
-            }
-
-            // 双击粘贴
-            override fun onDoubleTap(e: MotionEvent?): Boolean {
-                if (App.getSettings().getBoolean(getString(R.string.preference_key_double_click_paste), true)) {
-                    putClipboardDataToEditor()
-                }
-                return true
-            }
-        })
-
-        translateBtn.setOnTouchListener { _, event ->
-            return@setOnTouchListener gestureDetector.onTouchEvent(event)
         }
     }
 
