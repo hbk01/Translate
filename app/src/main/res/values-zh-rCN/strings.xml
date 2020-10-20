@@ -63,4 +63,6 @@
     <string name="preference_message_log">\n使用 %time, %tag, %level, %msg, %throws 定义你的格式。</string>
     <string name="preference_title_double_click_paste">双击粘贴</string>
     <string name="preference_summary_double_click_paste">双击翻译按钮粘贴剪切板内容</string>
+    <string name="menu_log_filter">过滤</string>
+    <string name="dialog_reset">重置</string>
 </resources>

@@ -54,6 +54,7 @@
 
     </PreferenceCategory>
 
+    <!-- Log -->
     <PreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/preference_catalog_log">
