@@ -1,29 +1,45 @@
 package cn.hbkcn.translate.view
 
+import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.EditText
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import cn.hbkcn.translate.App
 import cn.hbkcn.translate.R
 import kotlinx.android.synthetic.main.activity_log.*
+import org.json.JSONArray
+import java.util.*
 
 class LogActivity : AppCompatActivity() {
+    private val defaultFormat = "%time %tag %level %msg %throws"
+    private val array: JSONArray = App.readTodayLog()
+    private val temp: JSONArray = JSONArray()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log)
-        val array = App.readTodayLog()
 
-        val defaultFormat = "%time %tag %level %msg %throws"
-        var format: String = App.getSettings().getString(
+        showLog()
+    }
+
+    /**
+     * Show the log form array
+     */
+    private fun showLog() {
+        // clear text first.
+        logText.text = ""
+
+        val format: String = App.getSettings().getString(
             getString(R.string.preference_key_log_format), defaultFormat
         ).toString()
-
-        if (format == "") {
-            format = defaultFormat
-        }
 
         (0 until array.length()).forEach {
             val obj = array.getJSONObject(it)
@@ -49,8 +65,122 @@ class LogActivity : AppCompatActivity() {
             } else {
                 logText.append(str)
             }
+
             logText.append(System.lineSeparator())
             logText.append(System.lineSeparator())
         }
     }
+
+    /**
+     *
+     * @param name tag name
+     * @param text filter text
+     * @param isLike match method
+     */
+    private fun JSONArray.filter(name: String, text: String, isLike: Boolean = false) {
+        // clear temp array first.
+        temp.clear()
+
+        // if not have input, we skip it.
+        if (name.isEmpty() || text.isEmpty()) {
+            return
+        }
+
+        // add item to temp array.
+        (0 until length()).forEach {
+            val obj = this.getJSONObject(it)
+            if (isLike) {
+                val a = obj.getString(name).toLowerCase(Locale.CHINA)
+                val b = text.toLowerCase(Locale.CHINA)
+                if (a.contains(b)) {
+                    temp.put(obj)
+                }
+            } else {
+                if (obj.getString(name) == text) {
+                    temp.put(obj)
+                }
+            }
+        }
+
+        // remove all item
+        this.clear()
+
+        // add all json object to this array form temp.
+        this.copy(temp)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menu?.add(R.string.menu_log_filter)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.title) {
+            getString(R.string.menu_log_filter) -> {
+                val holder = FilterHolder(this)
+                val builder = with(AlertDialog.Builder(this)) {
+                    setCancelable(false)
+                    setView(holder.layout)
+                    setMessage("Filter this buffer.")
+                    setPositiveButton(R.string.dialog_ok) { _, _ ->
+                        array.filter("level", holder.level.text.toString())
+                        array.filter("tag", holder.tag.text.toString())
+                        array.filter("msg", holder.msg.text.toString(), true)
+                        array.filter("time", holder.time.text.toString(), true)
+                        showLog()
+                    }
+                    setNegativeButton(R.string.dialog_cancel, null)
+                    setNeutralButton(R.string.dialog_reset) { _, _ ->
+                        // remove all
+                        array.clear()
+                        // read the full log into array
+                        array.copy(App.readTodayLog())
+                        showLog()
+                    }
+                }
+                builder.show()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    inner class FilterHolder(context: Context) {
+        val layout = LinearLayout(context)
+        val level = EditText(context)
+        val tag = EditText(context)
+        val msg = EditText(context)
+        val time = EditText(context)
+
+        init {
+            layout.orientation = LinearLayout.VERTICAL
+            level.hint = "level (equal)"
+            tag.hint = "tag (equal)"
+            msg.hint = "msg (like)"
+            time.hint = "time (like)"
+
+            layout.addView(level)
+            layout.addView(tag)
+            layout.addView(msg)
+            layout.addView(time)
+        }
+    }
 }
+
+/**
+ * Copy other JSONArray into this JSONArray.
+ */
+private fun JSONArray.copy(other: JSONArray) {
+    (0 until other.length()).forEach {
+        put(other.get(it))
+    }
+}
+
+/**
+ * Clear the json array.
+ */
+private fun JSONArray.clear() {
+    (0 until length()).forEach { _ ->
+        remove(0)
+    }
+}
+
