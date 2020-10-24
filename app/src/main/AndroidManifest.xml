@@ -19,10 +19,12 @@
 
         <activity
             android:name=".view.LogActivity"
+            android:parentActivityName=".MainActivity"
             android:label="@string/preference_catalog_log" />
 
         <activity
             android:name=".view.SettingsActivity"
+            android:parentActivityName=".MainActivity"
             android:label="@string/title_activity_settings" />
 
         <activity android:name=".MainActivity">
