@@ -290,36 +290,39 @@ class MainActivity : AppCompatActivity() {
         translateBtn.setOnClickListener {
             count++
             handle.postDelayed({
-                if (count == 1) {
-                    // single click
-                    Log.e("onTouch", "onClick")
-                    val input = editText.text.toString()
-                    if (input != "" || lastInput != input ||
-                        lastToLanguage != toLanguage ||
-                        lastFromLanguage != fromLanguage
-                    ) { // 只要有一个变动就进行翻译操作
-                        lastInput = input
-                        lastToLanguage = toLanguage
-                        lastFromLanguage = fromLanguage
+                when (count) {
+                    1 -> {
+                        // single click
+                        Log.e("onTouch", "onClick")
+                        val input = editText.text.toString()
+                        if (input != "" || lastInput != input ||
+                            lastToLanguage != toLanguage ||
+                            lastFromLanguage != fromLanguage
+                        ) { // 只要有一个变动就进行翻译操作
+                            lastInput = input
+                            lastToLanguage = toLanguage
+                            lastFromLanguage = fromLanguage
 
-                        // added at v2.0.1, remove all views and add progress.
-                        content.removeAllViews()
-                        val progress = ProgressBar(this)
-                        content.addView(progress)
+                            // added at v2.0.1, remove all views and add progress.
+                            content.removeAllViews()
+                            val progress = ProgressBar(this)
+                            content.addView(progress)
 
-                        val msg = "Translate: %s, Language: %s-%s"
-                        App.info(tag, msg.format(input, fromLanguage.code, toLanguage.code))
-                        translate.translate(input, fromLanguage, toLanguage) {
-                            runOnUiThread {
-                                GenerateCard(this, layoutInflater, it).run(content)
+                            val msg = "Translate: %s, Language: %s-%s"
+                            App.info(tag, msg.format(input, fromLanguage.code, toLanguage.code))
+                            translate.translate(input, fromLanguage, toLanguage) {
+                                runOnUiThread {
+                                    GenerateCard(this, layoutInflater, it).run(content)
+                                }
                             }
                         }
                     }
-                } else if (count == 2) {
-                    // double click
-                    Log.e("onTouch", "onDoubleClick")
-                    if (App.getSettings().getBoolean(getString(R.string.preference_key_double_click_paste), true)) {
-                        putClipboardDataToEditor()
+                    2 -> {
+                        // double click
+                        Log.e("onTouch", "onDoubleClick")
+                        if (App.getSettings().getBoolean(getString(R.string.preference_key_double_click_paste), true)) {
+                            putClipboardDataToEditor()
+                        }
                     }
                 }
                 count = 0
@@ -329,7 +332,6 @@ class MainActivity : AppCompatActivity() {
 
         // Long click translate button to paste text.
         translateBtn.setOnLongClickListener {
-            Log.e("onTouch", "onLongClick")
             editText.setText("")
             return@setOnLongClickListener true
         }
@@ -369,7 +371,6 @@ class MainActivity : AppCompatActivity() {
             }
             getString(R.string.preference_catalog_log) -> {
                 startActivity(Intent(this, LogActivity::class.java))
-                finish()
             }
             getString(R.string.preference_title_update) -> update()
             getString(R.string.feedback) -> {

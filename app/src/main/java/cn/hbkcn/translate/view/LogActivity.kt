@@ -26,7 +26,7 @@ class LogActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log)
-
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         showLog()
     }
 
@@ -121,7 +121,6 @@ class LogActivity : AppCompatActivity() {
                 val builder = with(AlertDialog.Builder(this)) {
                     setCancelable(false)
                     setView(holder.layout)
-                    setMessage("Filter this buffer.")
                     setPositiveButton(R.string.dialog_ok) { _, _ ->
                         array.filter("level", holder.level.text.toString())
                         array.filter("tag", holder.tag.text.toString())
