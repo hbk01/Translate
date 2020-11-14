@@ -38,7 +38,7 @@ class App : Application() {
         private lateinit var logPath: String
         private lateinit var data: JSONArray
         private val formatter = SimpleDateFormat("HH:mm:ss", Locale.CHINA)
-        private val fileName = SimpleDateFormat("YYYYMMdd", Locale.CHINA).format(Date()) + ".log"
+        private val fileName = SimpleDateFormat("yyyyMMdd", Locale.CHINA).format(Date()) + ".log"
 
         /**
          * Get context in anywhere.
@@ -56,8 +56,6 @@ class App : Application() {
         fun getSettings(): SharedPreferences {
             return preference
         }
-
-        fun getString(resId: Int): String = app.getString(resId)
 
         /**
          * Log the message as info level.
@@ -105,6 +103,9 @@ class App : Application() {
                 val reader = FileReader(file)
                 val text = reader.readText()
                 reader.close()
+                if (text.isBlank()) {
+                    return JSONArray("[]")
+                }
                 return JSONArray(text)
             }
             return JSONArray()

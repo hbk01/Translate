@@ -76,6 +76,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
+        // 翻译通过分享传入的内容
+        if (Intent.ACTION_SEND == intent.action) {
+            when (intent.type) {
+                "text/plain" -> {
+                    val text: String? = intent.getStringExtra(Intent.EXTRA_TEXT)
+                    App.info(tag, "Receive Text: $text")
+                    if (text != null && text.isNotBlank()) {
+                        editText.setText(text)
+                        translateBtn.callOnClick()
+                    }
+                }
+            }
+        }
+
+        // 自动读取剪切板内容
         if (preference.getBoolean(getString(R.string.preference_key_clipboard), false)) {
             putClipboardDataToEditor()
         }
