@@ -11,6 +11,14 @@ class Response(private val json: String) {
     private val jsonObject: JSONObject = JSONObject(json)
 
     /**
+     * Get query
+     * @return query content
+     */
+    fun getQuery(): String {
+        return jsonObject.getString("query")
+    }
+
+    /**
      * Get translation.
      * @return translation
      */
