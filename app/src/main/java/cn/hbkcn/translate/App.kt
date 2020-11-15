@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.preference.PreferenceManager
+import cn.hbkcn.translate.databases.DatabaseHelper
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -22,6 +23,7 @@ class App : Application() {
     override fun onCreate() {
         app = this
         preference = PreferenceManager.getDefaultSharedPreferences(this)
+        db = DatabaseHelper(this)
         logPath = if (getContext().cacheDir.absolutePath.endsWith("/")) {
             getContext().cacheDir.absolutePath
         } else {
@@ -34,6 +36,7 @@ class App : Application() {
     companion object {
         private lateinit var app: App
         private lateinit var preference: SharedPreferences
+        private lateinit var db: DatabaseHelper
 
         private lateinit var logPath: String
         private lateinit var data: JSONArray
@@ -47,6 +50,13 @@ class App : Application() {
          */
         fun getContext(): Context {
             return app
+        }
+
+        /**
+         * Get Database Helper
+         */
+        fun getDatabaseHelper(): DatabaseHelper {
+            return db
         }
 
         /**
