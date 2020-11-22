@@ -65,4 +65,6 @@
     <string name="preference_summary_double_click_paste">双击翻译按钮粘贴剪切板内容</string>
     <string name="menu_log_filter">过滤</string>
     <string name="dialog_reset">重置</string>
+    <string name="preference_title_translate_history">翻译历史</string>
+    <string name="preference_summary_translate_history">在主页显示翻译历史</string>
 </resources>

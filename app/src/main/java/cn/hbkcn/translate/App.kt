@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.preference.PreferenceManager
+import cn.hbkcn.translate.databases.DatabaseHelper
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -22,6 +23,7 @@ class App : Application() {
     override fun onCreate() {
         app = this
         preference = PreferenceManager.getDefaultSharedPreferences(this)
+        db = DatabaseHelper(this)
         logPath = if (getContext().cacheDir.absolutePath.endsWith("/")) {
             getContext().cacheDir.absolutePath
         } else {
@@ -34,11 +36,12 @@ class App : Application() {
     companion object {
         private lateinit var app: App
         private lateinit var preference: SharedPreferences
+        private lateinit var db: DatabaseHelper
 
         private lateinit var logPath: String
         private lateinit var data: JSONArray
         private val formatter = SimpleDateFormat("HH:mm:ss", Locale.CHINA)
-        private val fileName = SimpleDateFormat("YYYYMMdd", Locale.CHINA).format(Date()) + ".log"
+        private val fileName = SimpleDateFormat("yyyyMMdd", Locale.CHINA).format(Date()) + ".log"
 
         /**
          * Get context in anywhere.
@@ -50,14 +53,19 @@ class App : Application() {
         }
 
         /**
+         * Get Database Helper
+         */
+        fun getDatabaseHelper(): DatabaseHelper {
+            return db
+        }
+
+        /**
          * Get settings in anywhere.
          * @return SharedPreference
          */
         fun getSettings(): SharedPreferences {
             return preference
         }
-
-        fun getString(resId: Int): String = app.getString(resId)
 
         /**
          * Log the message as info level.
@@ -105,6 +113,9 @@ class App : Application() {
                 val reader = FileReader(file)
                 val text = reader.readText()
                 reader.close()
+                if (text.isBlank()) {
+                    return JSONArray("[]")
+                }
                 return JSONArray(text)
             }
             return JSONArray()

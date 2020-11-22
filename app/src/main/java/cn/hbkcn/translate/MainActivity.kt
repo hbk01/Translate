@@ -26,6 +26,9 @@ import cn.hbkcn.translate.view.LogActivity
 import cn.hbkcn.translate.view.SettingsActivity
 import okhttp3.*
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.LinkedHashMap
 
 class MainActivity : AppCompatActivity() {
     private lateinit var from: Spinner
@@ -76,6 +79,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
+        // 翻译通过分享传入的内容
+        if (Intent.ACTION_SEND == intent.action) {
+            when (intent.type) {
+                "text/plain" -> {
+                    val text: String? = intent.getStringExtra(Intent.EXTRA_TEXT)
+                    App.info(tag, "Receive Text: $text")
+                    if (text != null && text.isNotBlank()) {
+                        editText.setText(text)
+                        translateBtn.callOnClick()
+                    }
+                }
+            }
+        }
+
+        // 自动读取剪切板内容
         if (preference.getBoolean(getString(R.string.preference_key_clipboard), false)) {
             putClipboardDataToEditor()
         }
@@ -211,7 +229,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("InflateParams", "ClickableViewAccessibility")
+    @SuppressLint("InflateParams", "ClickableViewAccessibility", "SimpleDateFormat", "ResourceType", "UseCompatLoadingForDrawables")
     private fun initial() {
         /**
          * 初始化控件
@@ -257,6 +275,41 @@ class MainActivity : AppCompatActivity() {
         val divider: View = cardView.findViewById(R.id.divider)
         divider.visibility = View.GONE
         content.addView(cardView)
+
+        // 填充历史记录
+        if (preference.getBoolean(getString(R.string.preference_key_translate_history), true)) {
+            val json = App.getDatabaseHelper().selectHistory(5)
+            json.forEach { (k, v) ->
+                val response = cn.hbkcn.translate.basic.Response(v)
+                val time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date(k))
+
+                // get widgets.
+                val historyCard = layoutInflater.inflate(R.layout.card_title, null)
+                historyCard.setOnClickListener {
+                    GenerateCard(this, layoutInflater, response).run(content)
+                }
+                val title: TextView = historyCard.findViewById(R.id.cardTitle)
+
+                val contentLayout: LinearLayout = historyCard.findViewById(R.id.cardContent)
+                val value = TextView(this)
+
+                val timeValue = TextView(this)
+                timeValue.append(System.lineSeparator())
+                timeValue.append(time)
+
+
+                title.text = response.getQuery()
+                response.getTranslation().forEach {
+                    value.append(it)
+                    value.append(System.lineSeparator())
+                }
+                value.text = value.text.removeSuffix(System.lineSeparator())
+
+                contentLayout.addView(value)
+                contentLayout.addView(timeValue)
+                content.addView(historyCard)
+            }
+        }
 
         /**
          * 初始化监听器
@@ -311,6 +364,9 @@ class MainActivity : AppCompatActivity() {
                             val msg = "Translate: %s, Language: %s-%s"
                             App.info(tag, msg.format(input, fromLanguage.code, toLanguage.code))
                             translate.translate(input, fromLanguage, toLanguage) {
+                                if (it.getErrorCode() != "100") {
+                                    App.getDatabaseHelper().insertHistory(it.toString())
+                                }
                                 runOnUiThread {
                                     GenerateCard(this, layoutInflater, it).run(content)
                                 }

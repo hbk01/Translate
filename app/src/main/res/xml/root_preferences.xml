@@ -39,6 +39,13 @@
             app:title="@string/preference_title_double_click_paste" />
 
         <SwitchPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/preference_key_translate_history"
+            app:summary="@string/preference_summary_translate_history"
+            app:title="@string/preference_title_translate_history" />
+
+        <SwitchPreference
             app:iconSpaceReserved="false"
             app:defaultValue="true"
             app:key="@string/preference_key_yi_yan"

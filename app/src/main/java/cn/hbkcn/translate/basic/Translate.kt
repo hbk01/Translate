@@ -39,9 +39,9 @@ class Translate {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                response.body?.string()?.let {
-                    App.info(tag, it)
-                    callback.invoke(TranslateResponse(it))
+                response.body?.string()?.let { json: String ->
+                    App.info(tag, json)
+                    callback.invoke(TranslateResponse(json))
                 }
             }
         })
