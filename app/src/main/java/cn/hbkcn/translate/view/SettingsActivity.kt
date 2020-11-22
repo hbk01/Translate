@@ -34,14 +34,14 @@ class SettingsActivity : AppCompatActivity() {
         when (item.title) {
             "About" -> {
                 val layout = LinearLayout(this)
+                layout.setPadding(10, 10, 10, 10)
                 val textView = TextView(this)
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                    textView.setTextAppearance(android.R.style.TextAppearance_Medium)
-//                } else {
-//                    textView.setTextAppearance(this, android.R.style.TextAppearance_Medium)
-//                }
                 textView.textSize = 14f
-                textView.setTextColor(Color.BLACK)
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    textView.setTextColor(getColor(R.color.colorAccent))
+                } else {
+                    textView.setTextColor(Color.BLACK)
+                }
                 textView.setPadding(10, 10, 10, 10)
                 textView.autoLinkMask = Linkify.ALL
                 textView.append("Translate v${BuildConfig.VERSION_NAME} build by hbk01.\n\n")
