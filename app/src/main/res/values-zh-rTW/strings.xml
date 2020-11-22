@@ -65,4 +65,6 @@
     <string name="preference_title_double_click_paste">雙擊粘貼</string>
     <string name="menu_log_filter">過濾</string>
     <string name="dialog_reset">重置</string>
+    <string name="preference_summary_translate_history">在主頁面顯示翻譯歷史</string>
+    <string name="preference_title_translate_history">翻譯歷史</string>
 </resources>

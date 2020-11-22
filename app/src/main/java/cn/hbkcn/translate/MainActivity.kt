@@ -277,36 +277,38 @@ class MainActivity : AppCompatActivity() {
         content.addView(cardView)
 
         // 填充历史记录
-        val json = App.getDatabaseHelper().selectHistory(5)
-        json.forEach { (k, v) ->
-            val response = cn.hbkcn.translate.basic.Response(v)
-            val time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date(k))
+        if (preference.getBoolean(getString(R.string.preference_key_translate_history), true)) {
+            val json = App.getDatabaseHelper().selectHistory(5)
+            json.forEach { (k, v) ->
+                val response = cn.hbkcn.translate.basic.Response(v)
+                val time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date(k))
 
-            // get widgets.
-            val historyCard = layoutInflater.inflate(R.layout.card_title, null)
-            historyCard.setOnClickListener {
-                GenerateCard(this, layoutInflater, response).run(content)
+                // get widgets.
+                val historyCard = layoutInflater.inflate(R.layout.card_title, null)
+                historyCard.setOnClickListener {
+                    GenerateCard(this, layoutInflater, response).run(content)
+                }
+                val title: TextView = historyCard.findViewById(R.id.cardTitle)
+
+                val contentLayout: LinearLayout = historyCard.findViewById(R.id.cardContent)
+                val value = TextView(this)
+
+                val timeValue = TextView(this)
+                timeValue.append(System.lineSeparator())
+                timeValue.append(time)
+
+
+                title.text = response.getQuery()
+                response.getTranslation().forEach {
+                    value.append(it)
+                    value.append(System.lineSeparator())
+                }
+                value.text = value.text.removeSuffix(System.lineSeparator())
+
+                contentLayout.addView(value)
+                contentLayout.addView(timeValue)
+                content.addView(historyCard)
             }
-            val title: TextView = historyCard.findViewById(R.id.cardTitle)
-
-            val contentLayout: LinearLayout = historyCard.findViewById(R.id.cardContent)
-            val value = TextView(this)
-
-            val timeValue = TextView(this)
-            timeValue.append(System.lineSeparator())
-            timeValue.append(time)
-
-
-            title.text = response.getQuery()
-            response.getTranslation().forEach {
-                value.append(it)
-                value.append(System.lineSeparator())
-            }
-            value.text = value.text.removeSuffix(System.lineSeparator())
-
-            contentLayout.addView(value)
-            contentLayout.addView(timeValue)
-            content.addView(historyCard)
         }
 
         /**
