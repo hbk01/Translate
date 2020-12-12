@@ -71,14 +71,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         preference = PreferenceManager.getDefaultSharedPreferences(this)
 
-        // update
-        if (preference.getBoolean(getString(R.string.preference_key_update), true)) update()
-
-        // init application widgets
-        initial()
-    }
-
-    override fun onResume() {
         // 翻译通过分享传入的内容
         if (Intent.ACTION_SEND == intent.action) {
             when (intent.type) {
@@ -91,8 +83,15 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+        } else if (preference.getBoolean(getString(R.string.preference_key_update), true)) {
+            update()
         }
 
+        // init application widgets
+        initial()
+    }
+
+    override fun onResume() {
         // 自动读取剪切板内容
         if (preference.getBoolean(getString(R.string.preference_key_clipboard), false)) {
             putClipboardDataToEditor()
