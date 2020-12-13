@@ -71,6 +71,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         preference = PreferenceManager.getDefaultSharedPreferences(this)
 
+        // init application widgets
+        initial()
+
         // 翻译通过分享传入的内容
         if (Intent.ACTION_SEND == intent.action) {
             when (intent.type) {
@@ -87,8 +90,6 @@ class MainActivity : AppCompatActivity() {
             update()
         }
 
-        // init application widgets
-        initial()
     }
 
     override fun onResume() {
