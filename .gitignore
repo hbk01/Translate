@@ -13,5 +13,6 @@
 .externalNativeBuild
 .cxx
 /apk
+.idea/
 .project
 /.settings
