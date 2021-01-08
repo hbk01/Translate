@@ -30,7 +30,7 @@ class DatabaseHelper(c: Context) : SQLiteOpenHelper(c, name, null, version) {
             put("time", System.currentTimeMillis())
             this
         }
-        writableDatabase.insert(tables["TranslateHistory"], "", values)
+        writableDatabase.insert("TranslateHistory", "", values)
     }
 
     /**
