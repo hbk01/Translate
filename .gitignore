@@ -12,6 +12,7 @@
 /captures
 .externalNativeBuild
 .cxx
-/apk/release
+/apk
+.idea/
 .project
 /.settings
