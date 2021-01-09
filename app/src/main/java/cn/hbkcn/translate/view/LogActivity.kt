@@ -11,10 +11,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import cn.hbkcn.translate.App
 import cn.hbkcn.translate.R
-import kotlinx.android.synthetic.main.activity_log.*
 import org.json.JSONArray
 import java.util.*
 
@@ -22,10 +22,12 @@ class LogActivity : AppCompatActivity() {
     private val defaultFormat = "%time %tag %level %msg %throws"
     private val array: JSONArray = App.readTodayLog()
     private val temp: JSONArray = JSONArray()
+    private lateinit var logText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log)
+        logText = findViewById(R.id.logText)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         showLog()
     }

@@ -1,18 +1,18 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+// apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "cn.hbkcn.translate"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
         // version code needs equal version name.
-        versionCode 221
-        versionName "2.2.1"
+        versionCode 222
+        versionName "2.2.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

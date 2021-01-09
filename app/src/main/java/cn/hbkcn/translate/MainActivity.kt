@@ -9,6 +9,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Gravity
 import android.view.Menu
@@ -339,7 +340,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         var count = 0
-        val handle = Handler()
+        val handle = Handler(Looper.myLooper()!!)
         translateBtn.setOnClickListener {
             count++
             handle.postDelayed({
@@ -409,6 +410,7 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.title) {
             getString(R.string.menu_settings) -> {
@@ -431,18 +433,18 @@ class MainActivity : AppCompatActivity() {
             getString(R.string.preference_title_update) -> update()
             getString(R.string.feedback) -> {
                 AlertDialog.Builder(this)
-                    .setTitle(R.string.feedback)
-                    .setMessage(R.string.feedback_tips)
-                    .setPositiveButton(R.string.feedback_gitee_btn) { _, _ ->
-                        val url = "https://gitee.com/hbk01/Translate/issues"
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-                    }
-                    .setNegativeButton(R.string.feedback_github_btn) { _, _ ->
-                        val url = "https://github.com/hbk01/Translate/issues"
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-                    }
-                    .create()
-                    .show()
+                        .setTitle(R.string.feedback)
+                        .setMessage(R.string.feedback_tips)
+                        .setPositiveButton(R.string.feedback_gitee_btn) { _, _ ->
+                            val url = "https://gitee.com/hbk01/Translate/issues"
+                            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                        }
+                        .setNegativeButton(R.string.feedback_github_btn) { _, _ ->
+                            val url = "https://github.com/hbk01/Translate/issues"
+                            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                        }
+                        .create()
+                        .show()
             }
         }
         return super.onOptionsItemSelected(item)
