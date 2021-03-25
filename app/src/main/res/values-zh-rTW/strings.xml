@@ -67,4 +67,5 @@
     <string name="dialog_reset">重置</string>
     <string name="preference_summary_translate_history">在主頁面顯示翻譯歷史</string>
     <string name="preference_title_translate_history">翻譯歷史</string>
+    <string name="menu_log_history">歷史</string>
 </resources>

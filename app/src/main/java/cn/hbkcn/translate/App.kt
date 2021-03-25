@@ -108,7 +108,15 @@ class App : Application() {
          * @author hbk01
          */
         fun readTodayLog(): JSONArray {
-            val file = File("$logPath$fileName")
+            return readLog(fileName)
+        }
+
+        /**
+         * Read the log of the specified date.
+         * @return date. format is 'yyyyMMdd.log', for example: '20210325.log'
+         */
+        fun readLog(date: String): JSONArray {
+            val file = File("$logPath$date")
             if (file.exists()) {
                 val reader = FileReader(file)
                 val text = reader.readText()
@@ -119,6 +127,20 @@ class App : Application() {
                 return JSONArray(text)
             }
             return JSONArray()
+        }
+
+        /**
+         * List all log file name.
+         * @return all filename. if not have anything, return an empty array.
+         */
+        fun listAllLog(): Array<out String> {
+            val file = File(logPath)
+            val list = file.list()
+            if (list != null) {
+                return list
+            } else {
+                return emptyArray()
+            }
         }
 
         /**

@@ -92,5 +92,6 @@
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_reset">Reset</string>
     <string name="dialog_checking_update">Checking update…</string>
+    <string name="menu_log_history">History</string>
 
 </resources>
