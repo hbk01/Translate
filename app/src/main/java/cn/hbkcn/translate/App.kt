@@ -13,6 +13,7 @@ import java.io.FileReader
 import java.io.FileWriter
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * @author hbk
@@ -134,12 +135,17 @@ class App : Application() {
          * @return all filename. if not have anything, return an empty array.
          */
         fun listAllLog(): Array<out String> {
-            val file = File(logPath)
-            val list = file.list()
-            if (list != null) {
-                return list
+            val files = File(logPath).listFiles()
+            val list: MutableList<String> = ArrayList()
+            return if (files != null) {
+                files.iterator().forEach {
+                    if (it.isFile && it.name.endsWith(".log")) {
+                        list.add(it.name)
+                    }
+                }
+                list.toTypedArray()
             } else {
-                return emptyArray()
+                emptyArray()
             }
         }
 
