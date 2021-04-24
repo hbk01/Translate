@@ -26,13 +26,13 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menu?.add("About")
+        menu?.add(getString(R.string.menu_about))
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.title) {
-            "About" -> {
+            getString(R.string.menu_about) -> {
                 val layout = LinearLayout(this)
                 layout.setPadding(10, 10, 10, 10)
                 val textView = TextView(this)
@@ -45,15 +45,22 @@ class SettingsActivity : AppCompatActivity() {
                 textView.setPadding(10, 10, 10, 10)
                 textView.autoLinkMask = Linkify.ALL
                 textView.append("Translate v${BuildConfig.VERSION_NAME} build by hbk01.\n\n")
-                textView.append("Contact me:\n")
-                textView.append("    E-Mail: 3243430237@qq.com\n")
-                textView.append("    Github: https://github.com/hbk01/\n")
-                textView.append("    Gitee : https://gitee.com/hbk01/\n\n")
-                textView.append("This project is Open-Source on:\n")
-                textView.append("    https://github.com/hbk01/Translate\n")
-                textView.append("    https://gitee.com/hbk01/Translate\n\n")
-                textView.append("We have the CLI Version for command line:\n")
-                textView.append("    https://github.com/hbk01/tr")
+                textView.append("""
+                    Contact me:
+                        E-Mail: 
+                            3243430237@qq.com
+                            2018hbk@gmail.com
+                        Github and Gitee:
+                            https://github.com/hbk01/
+                            https://gitee.com/hbk01/
+                            
+                    This project is Open-Source on:
+                        https://github.com/hbk01/Translate
+                        https://gitee.com/hbk01/Translate
+                        
+                    We have the CLI Version:
+                        https://github.com/hbk01/tr
+                """.trimIndent())
 
                 layout.addView(textView)
                 AlertDialog.Builder(this)
