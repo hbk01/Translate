@@ -9,8 +9,8 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -319,9 +319,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val textView: TextView = view as TextView
-                textView.gravity = Gravity.CENTER
-                val code = lanMap.getValue(textView.text.toString())
+                // 切换深色模式时 view 会为 null，所以这里不能用 view， 只能用 parent
+                val code = lanMap.getValue(parent?.selectedItem.toString())
                 fromLanguage = Language.getLanguage(code)
             }
         }
@@ -331,15 +330,13 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val textView: TextView = view as TextView
-                textView.gravity = Gravity.CENTER
-                val code = lanMap.getValue(textView.text.toString())
+                val code = lanMap.getValue(parent?.selectedItem.toString())
                 toLanguage = Language.getLanguage(code)
             }
         }
 
         var count = 0
-        val handle = Handler()
+        val handle = Handler(Looper.myLooper()!!)
         translateBtn.setOnClickListener {
             count++
             handle.postDelayed({
@@ -409,6 +406,7 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.title) {
             getString(R.string.menu_settings) -> {
@@ -431,18 +429,18 @@ class MainActivity : AppCompatActivity() {
             getString(R.string.preference_title_update) -> update()
             getString(R.string.feedback) -> {
                 AlertDialog.Builder(this)
-                    .setTitle(R.string.feedback)
-                    .setMessage(R.string.feedback_tips)
-                    .setPositiveButton(R.string.feedback_gitee_btn) { _, _ ->
-                        val url = "https://gitee.com/hbk01/Translate/issues"
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-                    }
-                    .setNegativeButton(R.string.feedback_github_btn) { _, _ ->
-                        val url = "https://github.com/hbk01/Translate/issues"
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-                    }
-                    .create()
-                    .show()
+                        .setTitle(R.string.feedback)
+                        .setMessage(R.string.feedback_tips)
+                        .setPositiveButton(R.string.feedback_gitee_btn) { _, _ ->
+                            val url = "https://gitee.com/hbk01/Translate/issues"
+                            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                        }
+                        .setNegativeButton(R.string.feedback_github_btn) { _, _ ->
+                            val url = "https://github.com/hbk01/Translate/issues"
+                            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                        }
+                        .create()
+                        .show()
             }
         }
         return super.onOptionsItemSelected(item)

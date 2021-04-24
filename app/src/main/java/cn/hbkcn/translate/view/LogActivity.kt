@@ -11,22 +11,26 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import cn.hbkcn.translate.App
 import cn.hbkcn.translate.R
-import kotlinx.android.synthetic.main.activity_log.*
 import org.json.JSONArray
+import java.text.SimpleDateFormat
 import java.util.*
 
 class LogActivity : AppCompatActivity() {
     private val defaultFormat = "%time %tag %level %msg %throws"
-    private val array: JSONArray = App.readTodayLog()
+    private var array: JSONArray = App.readTodayLog()
     private val temp: JSONArray = JSONArray()
+    private lateinit var logText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log)
+        logText = findViewById(R.id.logText)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.subtitle = SimpleDateFormat("yyyyMMdd", Locale.CHINA).format(Date()) + ".log"
         showLog()
     }
 
@@ -110,6 +114,7 @@ class LogActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menu?.add(R.string.menu_log_history)
         menu?.add(R.string.menu_log_filter)
         return super.onCreateOptionsMenu(menu)
     }
@@ -138,6 +143,17 @@ class LogActivity : AppCompatActivity() {
                     }
                 }
                 builder.show()
+            }
+            getString(R.string.menu_log_history) -> {
+                val allLog = App.listAllLog()
+                AlertDialog.Builder(this)
+                        .setItems(allLog) { _, index ->
+                            supportActionBar?.subtitle = allLog[index]
+                            array = App.readLog(allLog[index])
+                            showLog()
+                        }
+                        .setNegativeButton(R.string.dialog_cancel, null)
+                        .show()
             }
         }
         return super.onOptionsItemSelected(item)
