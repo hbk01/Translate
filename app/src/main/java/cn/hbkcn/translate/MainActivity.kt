@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -320,9 +319,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val textView: TextView = view as TextView
-                textView.gravity = Gravity.CENTER
-                val code = lanMap.getValue(textView.text.toString())
+                // 切换深色模式时 view 会为 null，所以这里不能用 view， 只能用 parent
+                val code = lanMap.getValue(parent?.selectedItem.toString())
                 fromLanguage = Language.getLanguage(code)
             }
         }
@@ -332,9 +330,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val textView: TextView = view as TextView
-                textView.gravity = Gravity.CENTER
-                val code = lanMap.getValue(textView.text.toString())
+                val code = lanMap.getValue(parent?.selectedItem.toString())
                 toLanguage = Language.getLanguage(code)
             }
         }
