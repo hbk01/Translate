@@ -94,5 +94,8 @@
     <string name="dialog_checking_update">Checking update…</string>
     <string name="menu_log_history">History</string>
     <string name="menu_about">About</string>
+    <string name="preference_key_log_error_limit" translatable="false">log_error_limit</string>
+    <string name="preference_title_log_error_limit">Line Limit</string>
+    <string name="preference_summary_log_error_limit">Error message line limit. (zero is not limit)</string>
 
 </resources>

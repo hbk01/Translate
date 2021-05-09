@@ -69,4 +69,6 @@
     <string name="preference_title_translate_history">翻譯歷史</string>
     <string name="menu_log_history">歷史</string>
     <string name="menu_about">關於</string>
+    <string name="preference_title_log_error_limit">行數限制</string>
+    <string name="preference_summary_log_error_limit">限制錯誤消息的行數（零是不限制）</string>
 </resources>
