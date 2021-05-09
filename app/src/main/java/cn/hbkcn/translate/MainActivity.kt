@@ -17,7 +17,6 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
-import cn.hbkcn.translate.basic.Errors
 import cn.hbkcn.translate.basic.Language
 import cn.hbkcn.translate.basic.Translate
 import cn.hbkcn.translate.update.Update
@@ -25,6 +24,7 @@ import cn.hbkcn.translate.view.GenerateCard
 import cn.hbkcn.translate.view.LogActivity
 import cn.hbkcn.translate.view.SettingsActivity
 import okhttp3.*
+import org.json.JSONObject
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -79,7 +79,11 @@ class MainActivity : AppCompatActivity() {
             when (intent.type) {
                 "text/plain" -> {
                     val text: String? = intent.getStringExtra(Intent.EXTRA_TEXT)
-                    App.info(tag, "Receive Text: $text")
+                    App.info(tag, JSONObject().apply {
+                        put("package", intent.`package`)
+                        put("action", intent.action)
+                        put("text", text)
+                    }.toString(4))
                     if (text != null && text.isNotBlank()) {
                         editText.setText(text)
                         translateBtn.callOnClick()
@@ -87,7 +91,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         } else if (preference.getBoolean(getString(R.string.preference_key_update), true)) {
-            update()
+            Update(this).update()
         }
 
     }
@@ -135,98 +139,16 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onResponse(call: Call, response: Response) {
                     val yiYan = response.body?.string() ?: getString(R.string.default_tip)
-                    App.info(tag, "YiYan: $yiYan")
+                    App.info(tag, JSONObject().apply {
+                        put("url", call.request().url)
+                        put("respCode", response.code)
+                        put("respMsg", response.message)
+                        put("respBody", response.body)
+                    }.toString(4))
                     runOnUiThread { callback.invoke(yiYan) }
                 }
             })
         }.start()
-    }
-
-    /**
-     * Check update and run update work.
-     */
-    private fun update() {
-        App.info(tag, "Checking update...")
-        val dialog: AlertDialog = AlertDialog.Builder(this)
-            .setMessage(R.string.dialog_checking_update)
-            .create()
-        dialog.show()
-
-        Update(this).checkUpdate { response ->
-            val error = response.errorCode()
-            if (error.isNotEmpty()) {
-                runOnUiThread {
-                    App.error(tag, "Update Error: No Network")
-                    Toast.makeText(this, Errors(error).toString(), Toast.LENGTH_SHORT).show()
-                }
-                dialog.dismiss()
-                return@checkUpdate
-            }
-            val code = response.versionCode()
-            if (code > BuildConfig.VERSION_CODE) {
-                runOnUiThread {
-                    App.info(tag, "Has update: $response")
-                    dialog.dismiss()
-                    AlertDialog.Builder(this)
-                        .setMessage(with(StringBuilder()) {
-                            append(getString(R.string.update_version_name).format(BuildConfig.VERSION_NAME, response.versionName()))
-                            append(System.lineSeparator())
-                            append(getString(R.string.update_version_code).format(BuildConfig.VERSION_CODE, response.versionCode()))
-                            append(System.lineSeparator())
-                            val isPreRelease =
-                                if (response.preRelease())
-                                    getString(R.string.update_true)
-                                else
-                                    getString(R.string.update_false)
-                            append(getString(R.string.update_pre_release).format(isPreRelease))
-                            append(System.lineSeparator())
-                            append(getString(R.string.update_time).format(response.updateTime()))
-                            append(System.lineSeparator())
-                            append(getString(R.string.update_change_log))
-                            append(System.lineSeparator())
-                            append(response.body())
-                            toString()
-                        })
-                        .setPositiveButton(R.string.update) { _, _ ->
-                            // 码云要登录才能下载文件（辣鸡），改用 Github 下载地址
-                            val url = "https://github.com/hbk01/Translate/releases/download/" +
-                                    "${response.versionName()}/${response.apkName()}"
-                            App.info(tag, "Download update: $url")
-                            Update(this).download(url, response.apkName())
-                        }
-                        .setNegativeButton(R.string.dialog_cancel, null)
-                        .setNeutralButton(R.string.update_website_download) { _, _ ->
-                            // 跳转到浏览器，打开下载页面
-                            AlertDialog.Builder(this)
-                                .setMessage(with(java.lang.StringBuilder()) {
-                                    append("由于码云下载文件需要登录，所以默认使用的是 github 下载，")
-                                    append("而 github 在国内处于半墙状态，下载很不稳定，")
-                                    append("所以也提供了码云的下载方式，不过你需要自行登录码云才能开始下载。")
-                                    append(System.lineSeparator())
-                                    append("点击确定将会打开码云的下载链接，在登录码云后会自动开始下载更新包。")
-                                    append(System.lineSeparator())
-                                    append(System.lineSeparator())
-                                    append("最后说一句，码云真好。:)")
-                                    toString()
-                                })
-                                .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                                    App.info(tag, "Open url: ${response.apkUrl()}")
-                                    val uri = Uri.parse(response.apkUrl())
-                                    startActivity(Intent(Intent.ACTION_VIEW, uri))
-                                }
-                                .setNegativeButton(android.R.string.cancel, null)
-                                .create().show()
-                        }
-                        .create()
-                        .show()
-                }
-            } else {
-                runOnUiThread {
-                    Toast.makeText(this, R.string.update_no_update, Toast.LENGTH_SHORT).show()
-                    dialog.dismiss()
-                }
-            }
-        }
     }
 
     @SuppressLint("InflateParams", "ClickableViewAccessibility", "SimpleDateFormat", "ResourceType", "UseCompatLoadingForDrawables")
@@ -358,8 +280,11 @@ class MainActivity : AppCompatActivity() {
                             val progress = ProgressBar(this)
                             content.addView(progress)
 
-                            val msg = "Translate: %s, Language: %s-%s"
-                            App.info(tag, msg.format(input, fromLanguage.code, toLanguage.code))
+                            App.info(tag, JSONObject().apply {
+                                put("translate", input)
+                                put("fromLanguage", fromLanguage.code)
+                                put("toLanguage", toLanguage.code)
+                            }.toString(4))
                             translate.translate(input, fromLanguage, toLanguage) {
                                 if (it.getErrorCode() != "100") {
                                     App.getDatabaseHelper().insertHistory(it.toString())
@@ -426,7 +351,7 @@ class MainActivity : AppCompatActivity() {
             getString(R.string.preference_catalog_log) -> {
                 startActivity(Intent(this, LogActivity::class.java))
             }
-            getString(R.string.preference_title_update) -> update()
+            getString(R.string.preference_title_update) -> Update(this).update()
             getString(R.string.feedback) -> {
                 AlertDialog.Builder(this)
                         .setTitle(R.string.feedback)

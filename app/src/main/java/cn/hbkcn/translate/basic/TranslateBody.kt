@@ -6,6 +6,7 @@ import androidx.preference.PreferenceManager
 import cn.hbkcn.translate.App
 import cn.hbkcn.translate.R
 import okhttp3.FormBody
+import org.json.JSONObject
 import java.security.MessageDigest
 
 class TranslateBody constructor(query: String, from: Language, to: Language) {
@@ -37,7 +38,10 @@ class TranslateBody constructor(query: String, from: Language, to: Language) {
         val time = System.currentTimeMillis()
         val salt = time.toString()
         val curtime = (time / 1000).toString()
-        App.info(tag, "{'appId': '$appId', 'appKey': '$appKey'}")
+        App.info(tag, JSONObject().apply {
+            put("appId", appId)
+            put("appKey", appKey)
+        }.toString(4))
         body["q"] = query
         body["from"] = from.code
         body["to"] = to.code
