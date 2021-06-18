@@ -31,7 +31,8 @@ class LogActivity : AppCompatActivity() {
         setContentView(R.layout.activity_log)
         logText = findViewById(R.id.logText)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.subtitle = SimpleDateFormat("yyyyMMdd", Locale.CHINA).format(Date()) + ".log"
+        supportActionBar?.subtitle = SimpleDateFormat("yyyyMMdd", Locale.CHINA)
+            .format(Date()) + ".log"
         showLog()
     }
 
@@ -55,7 +56,9 @@ class LogActivity : AppCompatActivity() {
             val level = obj.getString("level")
             val throws = obj.getJSONArray("throws")
 
-            val limit = App.getSettings().getInt(getString(R.string.preference_key_log_error_limit), 3)
+            val limit = App.getSettings().getInt(
+                getString(R.string.preference_key_log_error_limit), 3
+            )
             val builder = StringBuilder()
             val throwsMsg = if (limit == 0) {
                 (0 until throws.length()).forEach { index ->
@@ -64,7 +67,7 @@ class LogActivity : AppCompatActivity() {
                 builder.toString()
             } else {
                 // 考虑到 throws 长度小于指定的长度的情况，要按照 throws 的长度显示
-                val line = if (throws.length() < limit) { throws.length() } else { limit }
+                val line = if (throws.length() < limit) throws.length() else limit
                 (0 until line).forEach { index: Int ->
                     builder.appendLine(throws[index])
                 }
@@ -164,14 +167,15 @@ class LogActivity : AppCompatActivity() {
             }
             getString(R.string.menu_log_history) -> {
                 val allLog = App.listAllLog()
+                allLog.sort()
                 AlertDialog.Builder(this)
-                        .setItems(allLog) { _, index ->
-                            supportActionBar?.subtitle = allLog[index]
-                            array = App.readLog(allLog[index])
-                            showLog()
-                        }
-                        .setNegativeButton(R.string.dialog_cancel, null)
-                        .show()
+                    .setItems(allLog) { _, index ->
+                        supportActionBar?.subtitle = allLog[index]
+                        array = App.readLog(allLog[index])
+                        showLog()
+                    }
+                    .setNegativeButton(R.string.dialog_cancel, null)
+                    .show()
             }
         }
         return super.onOptionsItemSelected(item)

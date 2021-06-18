@@ -1,7 +1,6 @@
 package cn.hbkcn.translate
 
 import android.app.Application
-import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.preference.PreferenceManager
@@ -73,12 +72,12 @@ class App : Application() {
          * Log the message as info level.
          */
         fun info(tag: String, msg: String) {
-            Log.i(tag, msg)
+            Log.i(tag, msg.replace("\\", ""))
             val info: JSONObject = JSONObject().apply {
                 put("level", "info")
                 put("time", formatter.format(Date()))
                 put("tag", tag)
-                put("msg", msg)
+                put("msg", msg.replace("\\", ""))
                 put("throws", JSONArray())
             }
             synchronized(data) {
@@ -90,7 +89,10 @@ class App : Application() {
         /**
          * Log the  message as error level.
          */
-        fun error(tag: String, msg: String, exception: Throwable = RuntimeException("Unknown Exception")) {
+        fun error(
+            tag: String, msg: String,
+            exception: Throwable = RuntimeException("Unknown Exception")
+        ) {
             Log.e(tag, msg, exception)
             val error: JSONObject = JSONObject().apply {
                 put("level", "error")
@@ -133,7 +135,7 @@ class App : Application() {
                 }
                 return JSONArray(text)
             }
-            return JSONArray()
+            return JSONArray("[]")
         }
 
         /**
@@ -161,7 +163,7 @@ class App : Application() {
         private fun save() {
             val file = File("$logPath$fileName")
             val writer = FileWriter(file)
-            writer.write(data.toString())
+            writer.write(data.toString(4))
             writer.flush()
             writer.close()
         }
