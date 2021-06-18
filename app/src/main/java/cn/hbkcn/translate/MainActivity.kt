@@ -143,7 +143,7 @@ class MainActivity : AppCompatActivity() {
                         put("url", call.request().url)
                         put("respCode", response.code)
                         put("respMsg", response.message)
-                        put("respBody", response.body)
+                        put("respBody", yiYan)
                     }.toString(4))
                     runOnUiThread { callback.invoke(yiYan) }
                 }
