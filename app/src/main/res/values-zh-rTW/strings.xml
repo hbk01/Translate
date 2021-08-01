@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">翻譯</string>
-    <string name="input">輸入單詞或句子</string>
-    <string name="default_tip">今天，也是充滿希望的一天！</string>
+    <string name="tip_main_input">輸入單詞或句子</string>
+    <string name="tip_main_yiyan">今天，也是充滿希望的一天！</string>
     <string name="uk_phonetic">英式音標：%1$s</string>
     <string name="us_phonetic">美式音標：%1$s</string>
     <string name="lan_auto">自動</string>

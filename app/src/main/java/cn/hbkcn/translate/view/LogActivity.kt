@@ -115,8 +115,8 @@ class LogActivity : AppCompatActivity() {
         (0 until length()).forEach {
             val obj = this.getJSONObject(it)
             if (isLike) {
-                val a = obj.getString(name).toLowerCase(Locale.CHINA)
-                val b = text.toLowerCase(Locale.CHINA)
+                val a = obj.getString(name).lowercase(Locale.CHINA)
+                val b = text.lowercase(Locale.CHINA)
                 if (a.contains(b)) {
                     temp.put(obj)
                 }

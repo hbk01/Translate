@@ -33,7 +33,6 @@ import kotlin.collections.LinkedHashMap
 class MainActivity : AppCompatActivity() {
     private lateinit var from: Spinner
     private lateinit var to: Spinner
-    private lateinit var swap: Button
     private lateinit var editText: EditText
     private lateinit var translateBtn: Button
     private lateinit var content: LinearLayout
@@ -133,12 +132,12 @@ class MainActivity : AppCompatActivity() {
                 override fun onFailure(call: Call, e: IOException) {
                     App.error(tag, "Get YiYan Field.", e)
                     runOnUiThread {
-                        callback.invoke(getString(R.string.default_tip))
+                        callback.invoke(getString(R.string.tip_main_yiyan))
                     }
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    val yiYan = response.body?.string() ?: getString(R.string.default_tip)
+                    val yiYan = response.body?.string() ?: getString(R.string.tip_main_yiyan)
                     App.info(tag, JSONObject().apply {
                         put("url", call.request().url)
                         put("respCode", response.code)
@@ -158,7 +157,6 @@ class MainActivity : AppCompatActivity() {
          */
         from = findViewById(R.id.from)
         to = findViewById(R.id.to)
-        swap = findViewById(R.id.swap)
         editText = findViewById(R.id.editText)
         translateBtn = findViewById(R.id.translateBtn)
         content = findViewById(R.id.content)
@@ -185,7 +183,7 @@ class MainActivity : AppCompatActivity() {
 
         val cardView = layoutInflater.inflate(R.layout.card_title, null)
         val cardTitle: TextView = cardView.findViewById(R.id.cardTitle)
-        cardTitle.append(getString(R.string.default_tip))
+        cardTitle.append(getString(R.string.tip_main_yiyan))
         cardView.setOnClickListener {
             yiYan { cardTitle.text = it }
         }
@@ -218,7 +216,6 @@ class MainActivity : AppCompatActivity() {
                 val timeValue = TextView(this)
                 timeValue.append(System.lineSeparator())
                 timeValue.append(time)
-
 
                 title.text = response.getQuery()
                 response.getTranslation().forEach {
