@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Custom App Id -->
     <PreferenceCategory
@@ -79,6 +80,16 @@
             app:key="@string/preference_key_log_format"
             app:title="@string/preference_title_log_format"
             app:useSimpleSummaryProvider="true" />
+
+        <SeekBarPreference
+            app:iconSpaceReserved="false"
+            app:key="@string/preference_key_log_error_limit"
+            app:title="@string/preference_title_log_error_limit"
+            app:summary="@string/preference_summary_log_error_limit"
+            app:showSeekBarValue="true"
+            app:adjustable="true"
+            app:defaultValue="3"
+            android:max="10" />
 
     </PreferenceCategory>
 

@@ -16,11 +16,12 @@ import androidx.appcompat.app.AppCompatActivity
 import cn.hbkcn.translate.App
 import cn.hbkcn.translate.R
 import org.json.JSONArray
+import java.lang.StringBuilder
 import java.text.SimpleDateFormat
 import java.util.*
 
 class LogActivity : AppCompatActivity() {
-    private val defaultFormat = "%time %tag %level %msg %throws"
+    private val defaultFormat = "%time %level %tag %msg %throws"
     private var array: JSONArray = App.readTodayLog()
     private val temp: JSONArray = JSONArray()
     private lateinit var logText: TextView
@@ -30,7 +31,8 @@ class LogActivity : AppCompatActivity() {
         setContentView(R.layout.activity_log)
         logText = findViewById(R.id.logText)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.subtitle = SimpleDateFormat("yyyyMMdd", Locale.CHINA).format(Date()) + ".log"
+        supportActionBar?.subtitle = SimpleDateFormat("yyyyMMdd", Locale.CHINA)
+            .format(Date()) + ".log"
         showLog()
     }
 
@@ -41,9 +43,10 @@ class LogActivity : AppCompatActivity() {
         // clear text first.
         logText.text = ""
 
-        val format: String = App.getSettings().getString(
+        var format: String = App.getSettings().getString(
             getString(R.string.preference_key_log_format), defaultFormat
         ).toString()
+        format = if (format == "") defaultFormat else format
 
         (0 until array.length()).forEach {
             val obj = array.getJSONObject(it)
@@ -51,13 +54,31 @@ class LogActivity : AppCompatActivity() {
             val tag = obj.getString("tag")
             val msg = obj.getString("msg")
             val level = obj.getString("level")
-            val throws = obj.optString("throws", "")
+            val throws = obj.getJSONArray("throws")
+
+            val limit = App.getSettings().getInt(
+                getString(R.string.preference_key_log_error_limit), 3
+            )
+            val builder = StringBuilder()
+            val throwsMsg = if (limit == 0) {
+                (0 until throws.length()).forEach { index ->
+                    builder.appendLine(throws[index])
+                }
+                builder.toString()
+            } else {
+                // 考虑到 throws 长度小于指定的长度的情况，要按照 throws 的长度显示
+                val line = if (throws.length() < limit) throws.length() else limit
+                (0 until line).forEach { index: Int ->
+                    builder.appendLine(throws[index])
+                }
+                builder.toString()
+            }
 
             val str = format.replace("%time", time)
+                .replace("%level", level)
                 .replace("%tag", tag)
                 .replace("%msg", msg)
-                .replace("%level", level)
-                .replace("%throws", throws)
+                .replace("%throws", System.lineSeparator() + throwsMsg)
 
             if (level == "error") {
                 val span = SpannableStringBuilder(str)
@@ -94,8 +115,8 @@ class LogActivity : AppCompatActivity() {
         (0 until length()).forEach {
             val obj = this.getJSONObject(it)
             if (isLike) {
-                val a = obj.getString(name).toLowerCase(Locale.CHINA)
-                val b = text.toLowerCase(Locale.CHINA)
+                val a = obj.getString(name).lowercase(Locale.CHINA)
+                val b = text.lowercase(Locale.CHINA)
                 if (a.contains(b)) {
                     temp.put(obj)
                 }
@@ -146,14 +167,15 @@ class LogActivity : AppCompatActivity() {
             }
             getString(R.string.menu_log_history) -> {
                 val allLog = App.listAllLog()
+                allLog.sort()
                 AlertDialog.Builder(this)
-                        .setItems(allLog) { _, index ->
-                            supportActionBar?.subtitle = allLog[index]
-                            array = App.readLog(allLog[index])
-                            showLog()
-                        }
-                        .setNegativeButton(R.string.dialog_cancel, null)
-                        .show()
+                    .setItems(allLog) { _, index ->
+                        supportActionBar?.subtitle = allLog[index]
+                        array = App.readLog(allLog[index])
+                        showLog()
+                    }
+                    .setNegativeButton(R.string.dialog_cancel, null)
+                    .show()
             }
         }
         return super.onOptionsItemSelected(item)

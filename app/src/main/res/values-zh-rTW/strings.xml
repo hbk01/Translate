@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">翻譯</string>
-    <string name="input">輸入單詞或句子</string>
-    <string name="default_tip">今天，也是充滿希望的一天！</string>
+    <string name="tip_main_input">輸入單詞或句子</string>
+    <string name="tip_main_yiyan">今天，也是充滿希望的一天！</string>
     <string name="uk_phonetic">英式音標：%1$s</string>
     <string name="us_phonetic">美式音標：%1$s</string>
     <string name="lan_auto">自動</string>
@@ -69,4 +69,6 @@
     <string name="preference_title_translate_history">翻譯歷史</string>
     <string name="menu_log_history">歷史</string>
     <string name="menu_about">關於</string>
+    <string name="preference_title_log_error_limit">行數限制</string>
+    <string name="preference_summary_log_error_limit">限制錯誤消息的行數（零是不限制）</string>
 </resources>

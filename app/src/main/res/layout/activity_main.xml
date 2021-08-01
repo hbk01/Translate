@@ -38,8 +38,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_weight="0.99"
-                android:autofillHints="@string/input"
-                android:hint="@string/input"
+                android:autofillHints="@string/tip_main_input"
+                android:hint="@string/tip_main_input"
                 android:inputType="text" />
 
             <Button
@@ -65,11 +65,11 @@
                 android:layout_weight="0.5"
                 android:background="@null" />
 
-            <Button
-                android:id="@+id/swap"
+            <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:background="@drawable/ic_chevron_right_black_24dp" />
+                android:src="@drawable/ic_chevron_right_black_24dp"
+                android:contentDescription="@string/tip_main_arrow_image" />
 
             <Spinner
                 android:id="@+id/to"

@@ -14,6 +14,7 @@ import cn.hbkcn.translate.App
 import cn.hbkcn.translate.R
 import cn.hbkcn.translate.basic.Errors
 import cn.hbkcn.translate.basic.Response
+import org.json.JSONObject
 
 /**
  * Generate card view.
@@ -37,13 +38,14 @@ class GenerateCard constructor(
         root.removeAllViews()
         cardList.clear()
         if (response.getErrorCode() == "0") {
+            val json = JSONObject()
             if (response.getExplains().isNotEmpty()) {
-                App.info(tag, "Explains: ${response.getExplains()}")
+                json.put("explains", response.getExplains())
                 genCard(getString(R.string.card_title_explains), response.getExplains())
             }
 
             if (response.getTranslation().isNotEmpty()) {
-                App.info(tag, "Translations: ${response.getTranslation()}")
+                json.put("translations", response.getTranslation())
                 genCard(getString(R.string.card_title_translation), response.getTranslation(),
                     onClick = {
                         playMusic(response.getToSpeakUrl())
@@ -51,7 +53,7 @@ class GenerateCard constructor(
             }
 
             if (response.getUSPhonetic().isNotEmpty()) {
-                App.info(tag, "US Phonetic: ${response.getUSPhonetic()}")
+                json.put("US-phonetic", response.getUSPhonetic())
                 genCard(getString(R.string.card_title_us_speak), response.getUSPhonetic(),
                     onClick = {
                         playMusic(response.getUSPhoneticUrl())
@@ -59,7 +61,7 @@ class GenerateCard constructor(
             }
 
             if (response.getUKPhonetic().isNotEmpty()) {
-                App.info(tag, "UK Phonetic: ${response.getUKPhonetic()}")
+                json.put("UK-phonetic", response.getUKPhonetic())
                 genCard(getString(R.string.card_title_uk_speak), response.getUKPhonetic(),
                     onClick = {
                         playMusic(response.getUKPhoneticUrl())
@@ -67,9 +69,11 @@ class GenerateCard constructor(
             }
 
             if (response.getWebDict().isNotEmpty()) {
-                App.info(tag, "WebDict: ${response.getWebDict()}")
+                json.put("webdict", response.getWebDict())
                 genCard(getString(R.string.card_title_webdict), response.getWebDict())
             }
+
+            App.info(tag, json.toString(4))
         } else {
             // 查询错误码，显示错误
             App.error(
@@ -111,11 +115,9 @@ class GenerateCard constructor(
 
         when (content) {
             is String -> {
-                App.info(tag, "add new String")
                 contentView.text = content
             }
             is Collection<*> -> {
-                App.info(tag, "add new Collection")
                 content.forEach {
                     contentView.append(it.toString())
                     contentView.append(System.lineSeparator())
@@ -126,7 +128,6 @@ class GenerateCard constructor(
                 contentView.text = contentView.text.removeSuffix(System.lineSeparator())
             }
             is Map<*, *> -> {
-                App.info(tag, "add new Map")
                 content.forEach {
                     contentView.append(it.toString())
                     contentView.append(System.lineSeparator())
@@ -138,7 +139,6 @@ class GenerateCard constructor(
                 }
             }
             is View -> {
-                App.info(tag, "add new View")
                 contentLayout.addView(content)
             }
         }
@@ -165,7 +165,9 @@ class GenerateCard constructor(
      * @param url music url
      */
     private fun playMusic(url: String) {
-        App.info(tag, "Play Music: $url")
+        App.info(tag, JSONObject().apply {
+            put("playMusic", url)
+        }.toString(4))
         val player = MediaPlayer()
         player.setDataSource(url)
         player.prepareAsync()

@@ -3,6 +3,7 @@ package cn.hbkcn.translate.basic
 import cn.hbkcn.translate.App
 import okhttp3.*
 import okhttp3.Response
+import org.json.JSONObject
 import java.io.IOException
 import cn.hbkcn.translate.basic.Response as TranslateResponse
 
@@ -40,7 +41,7 @@ class Translate {
 
             override fun onResponse(call: Call, response: Response) {
                 response.body?.string()?.let { json: String ->
-                    App.info(tag, json)
+                    App.info(tag, JSONObject(json).toString(4))
                     callback.invoke(TranslateResponse(json))
                 }
             }
